@@ -168,13 +168,37 @@
         }
 
         /* 検索ボックス（ホーム用） */
-        .home-search-box {
-            margin: 20px auto;
-            width: 85%;
-            max-width: 340px;
-            display: flex;
-            gap: 8px;
-        }
+        .home-search-box button {
+    background: linear-gradient(135deg, var(--accent), #00E5FF);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    
+    /* ▼▼▼ ここを修正・追加 ▼▼▼ */
+    
+    /* 1. 上下の余白を入力欄(12px)に合わせて調整 */
+    padding: 12px 20px; 
+    
+    /* 2. ボタンが押しつぶされないように固定する魔法の呪文 */
+    flex-shrink: 0;
+    
+    /* 3. 中のアイコンや文字が折り返されないようにする */
+    white-space: nowrap;
+    
+    /* 4. アイコンをど真ん中に配置 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ▲▲▲ ここまで ▲▲▲ */
+
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: var(--shadow-pop);
+    font-family: inherit;
+    /* 行の高さをリセットしてズレ防止 */
+    line-height: 1; 
+}
         .home-search-box input {
             flex: 1;
             padding: 12px;
