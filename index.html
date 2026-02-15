@@ -3,66 +3,59 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>小学生 かんじマスター</title>
+  <title>小学生 かんじマスター - 進化版</title>
   <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&amp;display=swap" rel="stylesheet">
   <style>
-        /* --- デザイン設定 (元のまま) --- */
+        /* --- 基本設定 --- */
         body {
             font-family: 'Mochiy Pop One', sans-serif;
             background-color: #FFF3E0;
             margin: 0; padding: 0;
             min-height: 100vh; color: #4E342E;
             overflow-x: hidden; touch-action: manipulation;
-            user-select: none;
-            box-sizing: border-box;
+            user-select: none; box-sizing: border-box;
         }
 
-        /* 画面切り替え */
+        /* 画面共通 */
         .screen {
-            display: none;
-            flex-direction: column;
+            display: none; flex-direction: column;
             align-items: center; justify-content: center;
-            width: 100%; min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            opacity: 0; transition: opacity 0.3s;
+            width: 100%; min-height: 100vh; padding: 20px;
+            box-sizing: border-box; opacity: 0; transition: opacity 0.3s;
         }
         .screen.active { display: flex; opacity: 1; }
 
-        /* タイトル画面 */
+        /* --- タイトル画面 --- */
         #title-screen { 
             background: linear-gradient(135deg, #FFD54F 0%, #FFB74D 50%, #FFAB91 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        #title-screen::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            pointer-events: none;
+            position: relative; overflow: hidden;
         }
         .game-title {
-            font-size: 2.5rem; color: #FFF;
-            text-shadow: 3px 3px 0 #BF360C, -1px -1px 0 #FFE082;
-            text-align: center; margin-bottom: 20px;
-            animation: titleBounce 2s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
+            font-size: 2.8rem; color: #FFF;
+            text-shadow: 4px 4px 0 #BF360C, -2px -2px 0 #FFE082;
+            text-align: center; margin-bottom: 10px; z-index: 2;
             line-height: 1.2;
         }
-        @keyframes titleBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        
+        /* マスコット表示エリア（タイトル） */
+        .title-mascot-container {
+            font-size: 5rem; margin: 10px 0;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            animation: float 3s ease-in-out infinite; z-index: 2;
+        }
+        .title-level-badge {
+            background: #FFF; color: #E65100;
+            padding: 5px 20px; border-radius: 20px;
+            font-size: 1.5rem; font-weight: bold;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            margin-bottom: 20px; z-index: 2;
         }
 
-        /* 学年選択ボタン */
+        /* 学年ボタン */
         .grade-selector {
-            display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-            margin-bottom: 30px; z-index: 2; max-width: 320px;
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+            margin-bottom: 20px; z-index: 2; max-width: 350px;
         }
         .grade-btn {
             width: 45px; height: 45px; border-radius: 50%;
@@ -72,272 +65,266 @@
             font-family: inherit; transition: all 0.2s;
         }
         .grade-btn.selected {
-            background: #FF5722; transform: scale(1.1);
+            background: #FF5722; transform: scale(1.15);
             box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 0 15px #FFF;
+            border-color: #FFEB3B;
         }
 
+        /* モードボタン */
         .mode-btn {
-            width: 280px; font-size: 1.5rem; padding: 15px 0;
+            width: 280px; font-size: 1.4rem; padding: 12px 0;
             border-radius: 50px; border: none; cursor: pointer;
-            margin: 10px 0; color: white; display: flex;
+            margin: 8px 0; color: white; display: flex;
             align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 0 20px rgba(255,255,255,0.3);
-            font-family: inherit;
-            transition: all 0.2s ease;
-            position: relative;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            font-family: inherit; transition: transform 0.1s; z-index: 2;
         }
-        .mode-btn:hover {
-            box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 0 30px rgba(255,255,255,0.5), inset 0 0 20px rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-        .mode-btn:active { transform: scale(0.95) translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
-        .btn-practice { background: linear-gradient(135deg, #66BB6A 0%, #4CAF50 100%); }
-        .btn-test { background: linear-gradient(135deg, #EF5350 0%, #F44336 100%); }
+        .mode-btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn-practice { background: linear-gradient(to bottom, #66BB6A, #43A047); }
+        .btn-test { background: linear-gradient(to bottom, #EF5350, #E53935); }
 
-        /* リスト画面 */
-        #list-screen { justify-content: flex-start; padding-top: 20px; background: #FFF3E0; }
-        .header-info {
-            background: white; padding: 15px; border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            width: 90%; max-width: 600px;
+        /* --- リスト画面（進化版） --- */
+        #list-screen { justify-content: flex-start; padding-top: 10px; background: #FFF8E1; }
+        
+        /* ステータスヘッダー */
+        .status-header {
+            background: white; width: 100%; max-width: 600px;
+            border-radius: 20px; padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 15px; position: sticky; top: 10px; z-index: 100;
         }
-        .mode-badge {
-            font-size: 1rem; padding: 5px 15px; border-radius: 20px;
-            color: white; margin-bottom: 5px; font-weight: bold;
+        .status-mascot { font-size: 3rem; animation: bounce 2s infinite; }
+        .status-info { flex: 1; }
+        .level-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+        .level-text { font-size: 1.2rem; font-weight: bold; color: #E65100; }
+        .exp-text { font-size: 0.8rem; color: #888; }
+        
+        /* 経験値バー */
+        .xp-bar-bg {
+            width: 100%; height: 12px; background: #EEE;
+            border-radius: 10px; overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
         }
+        .xp-bar-fill {
+            height: 100%; background: linear-gradient(90deg, #FFC107, #FF9800);
+            width: 0%; transition: width 0.5s ease-out;
+            border-radius: 10px;
+        }
+
+        /* 検索とモード表示 */
+        .controls-area {
+            width: 100%; max-width: 600px; margin-bottom: 15px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .search-container { position: relative; width: 100%; }
         #search-box {
-            width: 100%; padding: 10px; font-size: 1.2rem;
-            border: 2px solid #FFCC80; border-radius: 10px;
-            margin-top: 10px; text-align: center; background: #FFF8E1;
-            font-family: inherit;
+            width: 100%; padding: 12px 15px; font-size: 1.1rem;
+            border: 2px solid #FFCC80; border-radius: 30px;
+            background: #FFF; font-family: inherit;
+            box-sizing: border-box; outline: none;
+            transition: border-color 0.3s;
+        }
+        #search-box:focus { border-color: #FF9800; box-shadow: 0 0 0 3px rgba(255,152,0,0.2); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+        .mode-badge {
+            text-align: center; padding: 5px; border-radius: 10px;
+            color: white; font-weight: bold; font-size: 0.9rem;
+            align-self: flex-start;
         }
 
+        /* 漢字グリッド */
         .kanji-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-            gap: 12px; width: 100%; max-width: 800px; padding-bottom: 50px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+            gap: 12px; width: 100%; max-width: 600px; padding-bottom: 60px;
         }
         .kanji-card {
-            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9E6 100%);
-            aspect-ratio: 1; border-radius: 12px;
+            background: #FFF; aspect-ratio: 1; border-radius: 15px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; cursor: pointer; position: relative;
-            box-shadow: 0 4px 0 #D7CCC8, 0 0 15px rgba(255,200,124,0.3);
-            border: 2px solid #FFE0B2;
-            transition: all 0.2s ease;
+            font-size: 2.2rem; cursor: pointer; position: relative;
+            box-shadow: 0 4px 0 #D7CCC8; border: 2px solid #FFE0B2;
+            transition: transform 0.1s;
         }
-        .kanji-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 0 #D7CCC8, 0 0 20px rgba(255,152,0,0.4);
+        .kanji-card:active { transform: translateY(4px); box-shadow: none; }
+        
+        /* クリアマーク */
+        .mark-badge {
+            position: absolute; top: -5px; right: -5px;
+            width: 24px; height: 24px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none;
         }
-        .kanji-card:active { transform: translateY(2px); box-shadow: 0 2px 0 #D7CCC8; }
-        .mark {
-            position: absolute; top: -8px; right: -8px; font-size: 1.2rem;
-            text-shadow: 1px 1px 0 #FFF; display: none;
-        }
-        .cleared-practice { 
-            background: linear-gradient(135deg, #F1F8E9 0%, #E8F5E9 100%);
-            border-color: #8BC34A;
-            box-shadow: 0 4px 0 #558B2F, 0 0 20px rgba(139,195,74,0.4) !important;
-        }
-        .cleared-practice .star-mark { display: block; animation: starSparkle 0.6s ease-out; }
-        .cleared-test { 
-            background: linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
-            border-color: #EF5350;
-            box-shadow: 0 4px 0 #C62828, 0 0 20px rgba(239,83,80,0.4) !important;
-        }
-        .cleared-test .crown-mark { display: block; animation: crownSpin 0.6s ease-out; }
-        @keyframes starSparkle {
-            0% { transform: scale(0) rotate(0deg); opacity: 0; }
-            50% { transform: scale(1.3) rotate(10deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-        @keyframes crownSpin {
-            0% { transform: scale(0) rotateZ(-180deg); opacity: 0; }
-            50% { transform: scale(1.3) rotateZ(10deg); opacity: 1; }
-            100% { transform: scale(1) rotateZ(0deg); opacity: 1; }
-        }
+        .cleared-practice { background: #E8F5E9; border-color: #4CAF50; }
+        .cleared-practice .star-mark { display: flex; background: #4CAF50; color: white; }
+        .cleared-test { background: #FFEBEE; border-color: #F44336; }
+        .cleared-test .crown-mark { display: flex; background: #F44336; color: white; }
 
-        /* 練習画面 */
-        #practice-screen { background: #E0F7FA; position: relative; }
-        #practice-screen.test-bg { background: #FFEBEE; }
-        .practice-header {
+        /* --- 練習・テスト画面 --- */
+        #practice-screen { background: #E0F7FA; }
+        #practice-screen.test-mode { background: #FFEBEE; }
+        .nav-header {
             width: 100%; max-width: 500px; display: flex;
             justify-content: space-between; align-items: center; margin-bottom: 20px;
         }
-        .nav-btn {
-            background: #607D8B; color: white; border: none; padding: 8px 16px;
-            border-radius: 20px; box-shadow: 0 3px 0 #455A64; font-family: inherit;
-            cursor: pointer;
+        .back-btn {
+            background: #78909C; color: white; border: none; padding: 8px 20px;
+            border-radius: 20px; font-family: inherit; font-size: 1rem;
+            box-shadow: 0 4px 0 #546E7A; cursor: pointer;
         }
-        .nav-btn:active { transform: translateY(2px); }
-        .target-char-display {
-            font-size: 1.8rem; color: #006064; font-weight: bold; white-space: nowrap;
-        }
-        .canvas-container {
-            background: white; padding: 15px; border-radius: 20px;
-            box-shadow: 0 8px 0 #B0BEC5; margin-bottom: 20px; position: relative;
-        }
-        #character-target-div { width: 300px; height: 300px; touch-action: none; }
-        #message-area { height: 40px; font-size: 1.2rem; font-weight: bold; text-align: center; }
+        .back-btn:active { transform: translateY(4px); box-shadow: none; }
 
-        /* 結果ポップアップ */
-        #result-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95); display: none;
+        .canvas-area {
+            background: white; padding: 10px; border-radius: 25px;
+            box-shadow: 0 10px 0 #B0BEC5, 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px; position: relative;
+        }
+        #character-target { width: 300px; height: 300px; touch-action: none; }
+        
+        .message-box {
+            background: white; padding: 10px 20px; border-radius: 15px;
+            font-size: 1.2rem; font-weight: bold; color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); min-width: 200px; text-align: center;
+        }
+
+        /* --- 結果・レベルアップモーダル --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none;
             flex-direction: column; align-items: center; justify-content: center;
-            z-index: 200;
+            z-index: 200; backdrop-filter: blur(5px);
         }
-        #result-overlay.active { display: flex; }
-        .result-btn {
-            width: 240px; padding: 15px; margin: 10px 0; border: none;
-            border-radius: 50px; font-size: 1.3rem; color: white;
-            box-shadow: 0 5px 0 rgba(0,0,0,0.2); font-family: inherit; cursor: pointer;
+        .overlay.active { display: flex; animation: fadeIn 0.3s; }
+
+        .result-card {
+            background: white; width: 85%; max-width: 320px;
+            border-radius: 25px; padding: 30px 20px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .result-btn:active { transform: scale(0.95); }
+        
+        .levelup-anim-container { text-align: center; color: white; }
+        .levelup-text {
+            font-size: 3rem; color: #FFD700; text-shadow: 0 0 20px #FF6F00;
+            margin-bottom: 20px; animation: glow 1s infinite alternate;
+        }
+        .new-mascot-reveal { font-size: 8rem; animation: spinPop 1s ease-out; }
+        
+        /* 汎用ボタン */
+        .action-btn {
+            width: 100%; padding: 12px; margin: 8px 0; border: none;
+            border-radius: 15px; font-size: 1.1rem; color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2); font-family: inherit; cursor: pointer;
+        }
         .btn-next { background: #4CAF50; }
         .btn-retry { background: #FF9800; }
-        .btn-home { background: #607D8B; }
         
-        /* アニメーション */
-        @keyframes pop {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes popAndBounce {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.3); }
-            70% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .reward-animation {
-            position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 10rem;
-            animation: popAndBounce 0.6s ease-out; pointer-events: none;
-            display: none; z-index: 100; text-shadow: 0 0 30px rgba(255, 255, 255, 1),
-                                                       0 0 60px rgba(255, 150, 0, 0.6);
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-        }
+        /* アニメーション定義 */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes spinPop { 0% { transform: scale(0) rotate(-180deg); } 100% { transform: scale(1) rotate(0deg); } }
+        @keyframes glow { from { text-shadow: 0 0 10px #FF6F00; } to { text-shadow: 0 0 30px #FFFF00, 0 0 10px white; } }
 
   </style>
  </head>
  <body>
+
   <div id="title-screen" class="screen active">
-   <div class="game-title">
-    全学年対応<br>
-    かんじ<br>
-    マスター
-   </div>
+   <div class="game-title">かんじ<br>マスター</div>
+   
+   <div class="title-mascot-container" id="title-mascot">🥚</div>
+   <div class="title-level-badge" id="title-level">Lv.1</div>
+
    <div class="grade-selector">
-    <button class="grade-btn selected" onclick="setGrade(1)">1</button> <button class="grade-btn" onclick="setGrade(2)">2</button> <button class="grade-btn" onclick="setGrade(3)">3</button> <button class="grade-btn" onclick="setGrade(4)">4</button> <button class="grade-btn" onclick="setGrade(5)">5</button> <button class="grade-btn" onclick="setGrade(6)">6</button>
-   </div><button class="mode-btn btn-practice" onclick="selectMode('practice')"><span>⭐</span> れんしゅう</button> <button class="mode-btn btn-test" onclick="selectMode('test')"><span>🏆</span> テスト</button>
+    <button class="grade-btn selected" onclick="setGrade(1)">1</button>
+    <button class="grade-btn" onclick="setGrade(2)">2</button>
+    <button class="grade-btn" onclick="setGrade(3)">3</button>
+    <button class="grade-btn" onclick="setGrade(4)">4</button>
+    <button class="grade-btn" onclick="setGrade(5)">5</button>
+    <button class="grade-btn" onclick="setGrade(6)">6</button>
+   </div>
+
+   <button class="mode-btn btn-practice" onclick="selectMode('practice')">
+       <span>⭐</span> れんしゅう (＋1 XP)
+   </button>
+   <button class="mode-btn btn-test" onclick="selectMode('test')">
+       <span>👑</span> テスト (＋1 XP)
+   </button>
   </div>
+
   <div id="list-screen" class="screen">
-   <div class="header-info">
-    <div id="mode-display" class="mode-badge"></div>
-    <div>
-     あつめた数：<span id="star-counter" style="font-weight:bold;">0</span> / <span id="star-total">80</span>
-    </div><input type="text" id="search-box" placeholder="けんさく（よみ・かんじ）" oninput="filterList()"> <button class="nav-btn" onclick="showScreen('title-screen')" style="margin-top:10px;">タイトルへ</button>
+   <div class="status-header">
+       <div class="status-mascot" id="list-mascot">🥚</div>
+       <div class="status-info">
+           <div class="level-row">
+               <span class="level-text" id="list-level">Lv.1</span>
+               <span class="exp-text">つぎのレベルまで <span id="next-xp">5</span></span>
+           </div>
+           <div class="xp-bar-bg">
+               <div class="xp-bar-fill" id="xp-bar"></div>
+           </div>
+       </div>
    </div>
-   <div class="kanji-grid" id="kanji-grid"></div><button class="nav-btn" onclick="resetData()" style="margin-top:30px; background:#B0BEC5; font-size:0.8rem;">データを消す</button>
+
+   <div class="controls-area">
+       <div class="mode-badge" id="mode-display" style="background:#4CAF50;">1ねんせい・れんしゅう</div>
+       <div class="search-container">
+           <input type="text" id="search-box" placeholder="けんさく（よみ・かんじ）" oninput="filterList()">
+           <span class="search-icon">🔍</span>
+       </div>
+   </div>
+
+   <div class="kanji-grid" id="kanji-grid"></div>
+   
+   <button class="back-btn" onclick="showScreen('title-screen')" style="margin-top:20px; background:#B0BEC5;">
+       タイトルへもどる
+   </button>
+   <button onclick="resetData()" style="margin-top:20px; border:none; background:none; color:#AAA; font-size:0.8rem; text-decoration:underline;">データを消す</button>
   </div>
+
   <div id="practice-screen" class="screen">
-   <div class="practice-header"><button class="nav-btn" onclick="showScreen('list-screen')">もどる</button>
-    <div id="current-reading" class="target-char-display">
-     よみ
-    </div>
-    <div style="width: 60px;"></div>
+   <div class="nav-header">
+    <button class="back-btn" onclick="showScreen('list-screen')">もどる</button>
+    <div id="current-reading" style="font-size:1.5rem; font-weight:bold; color:#006064;">よみ</div>
+    <div style="width:50px;"></div>
    </div>
-   <div class="canvas-container">
-    <div id="character-target-div"></div>
-    <div id="anim-star" class="reward-animation">
-     ⭐
-    </div>
-    <div id="anim-crown" class="reward-animation">
-     👑
-    </div>
+   
+   <div class="canvas-area">
+    <div id="character-target"></div>
    </div>
-   <div id="message-area">
-    なぞってみよう！
-   </div>
-   <div id="result-overlay">
-    <div class="result-title" id="result-title-text" style="font-size:2.5rem; margin-bottom:20px;">
-     できた！
-    </div><button class="result-btn btn-next" onclick="goNext()">つぎへ ▶</button> <button class="result-btn btn-retry" onclick="retry()">もういちど ↺</button> <button class="result-btn btn-home" onclick="showScreen('list-screen')">ホーム 🏠</button>
-   </div><button class="nav-btn" onclick="retry()" style="background:#FF7043; margin-top:10px; z-index:10;">書き直す</button>
+   
+   <div class="message-box" id="message-area">なぞってみよう！</div>
+   <button class="nav-btn" onclick="retry()" style="background:#FF7043; color:white; border:none; padding:8px 20px; border-radius:20px; margin-top:15px; font-family:inherit; box-shadow:0 3px 0 #D84315;">書き直す</button>
   </div>
+
+  <div id="result-overlay" class="overlay">
+   <div class="result-card">
+    <div style="font-size:3rem; margin-bottom:10px;" id="result-icon">⭐</div>
+    <h2 id="result-msg" style="margin:0 0 20px 0; color:#4CAF50;">できた！</h2>
+    <div style="font-size:1.2rem; margin-bottom:20px; font-weight:bold; color:#FF9800;">
+        けいけんち +1 GET!
+    </div>
+    <button class="action-btn btn-next" onclick="goNext()">つぎへ ▶</button>
+    <button class="action-btn btn-retry" onclick="retry()">もういちど ↺</button>
+    <button class="action-btn" style="background:#78909C;" onclick="showScreen('list-screen')">いちらんへ 🏠</button>
+   </div>
+  </div>
+
+  <div id="levelup-overlay" class="overlay">
+      <div class="levelup-anim-container">
+          <div class="levelup-text">LEVEL UP!</div>
+          <div class="new-mascot-reveal" id="levelup-mascot">🐣</div>
+          <div style="font-size:1.5rem; margin-top:20px;">
+              レベル <span id="new-level-num">2</span> になった！<br>
+              マスコットが しんか したよ！
+          </div>
+          <button class="action-btn" style="background:#FF9800; margin-top:30px; width:200px;" onclick="closeLevelUp()">やったー！</button>
+      </div>
+  </div>
+
   <script>
-        // --- 効果音ライブラリ ---
-        let audioContext;
-        
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
-
-        function playSound(type) {
-            try {
-                initAudio();
-                const now = audioContext.currentTime;
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-
-                switch(type) {
-                    case 'success':
-                        osc.frequency.setValueAtTime(800, now);
-                        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-                        gain.gain.setValueAtTime(0.3, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-                        osc.start(now);
-                        osc.stop(now + 0.15);
-                        break;
-                    case 'complete':
-                        osc.frequency.setValueAtTime(1000, now);
-                        osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
-                        gain.gain.setValueAtTime(0.4, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-                        osc.start(now);
-                        osc.stop(now + 0.1);
-                        break;
-                    case 'click':
-                        osc.frequency.setValueAtTime(600, now);
-                        osc.frequency.exponentialRampToValueAtTime(400, now + 0.08);
-                        gain.gain.setValueAtTime(0.2, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-                        osc.start(now);
-                        osc.stop(now + 0.08);
-                        break;
-                    case 'error':
-                        osc.frequency.setValueAtTime(300, now);
-                        osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
-                        gain.gain.setValueAtTime(0.2, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-                        osc.start(now);
-                        osc.stop(now + 0.15);
-                        break;
-                    case 'levelup':
-                        [800, 1000, 1200].forEach((freq, i) => {
-                            const o = audioContext.createOscillator();
-                            const g = audioContext.createGain();
-                            o.connect(g);
-                            g.connect(audioContext.destination);
-                            o.frequency.value = freq;
-                            g.gain.setValueAtTime(0.3, now + i * 0.08);
-                            g.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.1);
-                            o.start(now + i * 0.08);
-                            o.stop(now + i * 0.08 + 0.1);
-                        });
-                        break;
-                }
-            } catch(e) {
-                console.log('音声再生エラー:', e);
-            }
-        }
-
         // --- 全学年漢字データ（圧縮形式） ---
         const compressedKanjiData = {
             1: "一:イチ/ひと-つ,二:ニ/ふた-つ,三:サン/みっ-つ,四:シ/よん,五:ゴ/いつ-つ,六:ロク/ろっ-つ,七:シチ/なな,八:ハチ/やっ-つ,九:キュウ/ここの-つ,十:ジュウ/とお,人:ジン/ひと,日:ニチ/ひ,月:ゲツ/つき,火:カ/ひ,水:スイ/みず,木:モク/き,金:キン/かね,土:ド/つち,上:ジョウ/うえ,下:カ/した,左:サ/ひだり,右:ウ/みぎ,中:チュウ/なか,大:ダイ/おお-きい,小:ショウ/ちい-さい,山:サン/やま,川:セン/かわ,田:デン/た,口:コウ/くち,目:モク/め,耳:ジ/みみ,手:シュ/て,足:ソク/あし,力:リョク/ちから,女:ジョ/おんな,男:ダン/おとこ,子:シ/こ,学:ガク/まな-ぶ,校:コウ,先:セン/さき,生:セイ/い-きる,名:メイ/な,字:ジ/あざ,文:ブン/ふみ,本:ホン/もと,正:セイ/ただ-しい,白:ハク/しろ,青:セイ/あお,赤:セキ/あか,花:カ/はな,草:ソウ/くさ,林:リン/はやし,森:シン/もり,空:クウ/そら,天:テン/あめ,雨:ウ/あめ,石:セキ/いし,車:シャ/くるま,音:オン/おと,円:エン/まる,王:オウ,玉:ギョク/たま,虫:チュウ/むし,町:チョウ/まち,村:ソン/むら,竹:チク/たけ,早:ソウ/はや-い,立:リツ/た-つ,見:ケン/み-る,貝:バイ/かい,気:キ,休:キュウ/やす-む,糸:シ/いと,入:ニュウ/はい-る,出:シュツ/で-る,犬:ケン/いぬ,夕:セキ/ゆう,千:セン/ち,百:ヒャク,年:ネン/とし",
@@ -348,41 +335,130 @@
             6: "異:イ/こと,遺:イ,域:イキ,宇:ウ,映:エイ/うつ-る,延:エン/の-びる,沿:エン/そ-う,我:ガ/われ,灰:カイ/はい,拡:カク,革:カク/かわ,閣:カク,割:カツ/わ-る,株:カブ,干:カン/ほ-す,巻:カン/ま-く,看:カン,簡:カン,危:キ/あぶ-ない,机:キ/つくえ,揮:キ,貴:キ/とうと-い,疑:ギ/うたが-う,吸:キュウ/す-う,供:キョウ/とも,胸:キョウ/むね,郷:キョウ,勤:キン/つと-める,筋:キン/すじ,系:ケイ,敬:ケイ/うやま-う,警:ケイ,劇:ゲキ,激:ゲキ/はげ-しい,穴:ケツ/あな,絹:ケン/きぬ,権:ケン,憲:ケン,源:ゲン/みなもと,厳:ゲン/きび-しい,己:コ/おのれ,呼:コ/よ-ぶ,誤:ゴ/あやま-る,后:コウ,孝:コウ,皇:コウ,紅:コウ/べに,降:コウ/お-りる,鋼:コウ/はがね,刻:コク/きざ-む,穀:コク,骨:コツ/ほね,困:コン/こま-る,砂:サ/すな,座:ザ/すわ-る,済:サイ/す-む,裁:サイ/さば-く,策:サク,冊:サツ,蚕:サン/かいこ,至:シ/いた-る,私:シ/わたし,姿:シ/すがた,視:シ,詞:シ,誌:シ,磁:ジ,射:シャ/い-る,捨:シャ/す-てる,尺:シャク,若:ジャク/わか-い,樹:ジュ,収:シュウ/おさ-める,宗:シュウ,就:シュウ/つ-く,衆:シュウ,従:ジュウ/したが-う,縦:ジュウ/たて,縮:シュク/ちぢ-む,熟:ジュク/う-れる,純:ジュン,処:ショ,署:ショ,諸:ショ,除:ジョ/のぞ-く,将:ショウ,傷:ショウ/きず,障:ショウ/さわ-る,城:ジョウ/しろ,蒸:ジョウ/む-す,針:シン/はり,仁:ジン,垂:スイ/た-れる,推:スイ/お-す,寸:スン,盛:セイ/も-る,聖:セイ,誠:セイ/まこと,宣:セン,専:セン/もっぱ-ら,泉:セン/いずみ,洗:セン/あら-う,染:セン/そ-める,善:ゼン/よ-い,奏:ソウ/かな-でる,窓:ソウ/まど,創:ソウ/つく-る,装:ソウ/よそお-う,層:ソウ,操:ソウ/あやつ-る,蔵:ゾウ/くら,臓:ゾウ,存:ゾン,尊:ソン/とうと-い,宅:タク,担:タン/かつ-ぐ,探:タン/さが-す,誕:タン,段:ダン,暖:ダン/あたた-かい,値:チ/あたい,宙:チュウ,忠:チュウ,著:チョ/あらわ-す,庁:チョウ,頂:チョウ/いただき,潮:チョウ/しお,賃:チン,痛:ツウ/いた-い,展:テン,討:トウ/う-つ,党:トウ,糖:トウ,届:トド/とど-く,難:ナン/むずか-しい,乳:ニュウ/ちち,認:ニン/みと-める,納:ノウ/おさ-める,脳:ノウ,派:ハ,拝:ハイ/おが-む,背:ハイ/せ,肺:ハイ,俳:ハイ,班:ハン,晩:バン,否:ヒ,批:ヒ,秘:ヒ/ひ-める,腹:フク/はら,奮:フン/ふる-う,並:ヘイ/なら-ぶ,陛:ヘイ,閉:ヘイ/し-める,片:ヘン/かた,補:ホ/おぎな-う,暮:ボ/く-らす,宝:ホウ/たから,訪:ホウ/おとず-れる,亡:ボウ/な-く,忘:ボウ/わす-れる,棒:ボウ,枚:マイ,幕:マク,密:ミツ,盟:メイ,模:モ,訳:ヤク/わけ,郵:ユウ,優:ユウ/やさ-しい,幼:ヨウ/おさな-い,欲:ヨク/ほっ-する,翌:ヨク,乱:ラン/みだ-れる,卵:ラン/たまご,覧:ラン,裏:リ/うら,律:リツ,臨:リン/のぞ-む,朗:ロウ/ほが-らか,論:ロン"
         };
 
-        // --- データ展開用関数 ---
+        // --- データ展開 ---
         function parseCompressedData(grade, compressedString) {
             return compressedString.split(',').map(item => {
                 const [char, reading] = item.split(':');
                 return { char, reading };
             });
         }
-
-        // 全学年のデータを構築
         const allKanjiData = {};
         for (let g = 1; g <= 6; g++) {
             if (compressedKanjiData[g]) {
                 allKanjiData[g] = parseCompressedData(g, compressedKanjiData[g]);
-            } else {
-                allKanjiData[g] = [];
             }
         }
 
-        // 状態管理
+        // --- 効果音システム ---
+        let audioContext;
+        function playSound(type) {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioContext.currentTime;
+            
+            // 汎用発振器
+            const createOsc = (freq, type, dur, vol = 0.1) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(vol, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + dur);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start(now);
+                osc.stop(now + dur);
+            };
+
+            switch(type) {
+                case 'success': createOsc(800, 'sine', 0.2); break;
+                case 'click': createOsc(400, 'triangle', 0.1, 0.05); break;
+                case 'error': createOsc(150, 'sawtooth', 0.3); break;
+                case 'complete': 
+                    createOsc(500, 'sine', 0.1); 
+                    setTimeout(() => createOsc(800, 'sine', 0.3), 100);
+                    break;
+                case 'levelup': // ファンファーレ
+                    const melody = [523, 659, 783, 1046, 783, 1046];
+                    melody.forEach((f, i) => {
+                        const o = audioContext.createOscillator();
+                        const g = audioContext.createGain();
+                        o.type = 'square';
+                        o.frequency.value = f;
+                        g.gain.setValueAtTime(0.1, now + i*0.1);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + i*0.1 + 0.3);
+                        o.connect(g);
+                        g.connect(audioContext.destination);
+                        o.start(now + i*0.1);
+                        o.stop(now + i*0.1 + 0.3);
+                    });
+                    break;
+            }
+        }
+
+        // --- 状態管理 ---
         let progressPractice = JSON.parse(localStorage.getItem('kanjiMasterPractice')) || {};
         let progressTest = JSON.parse(localStorage.getItem('kanjiMasterTest')) || {};
         let writer;
         let currentChar = null;
         let currentMode = 'practice';
         let currentGrade = 1;
+        
+        // レベル計算定数
+        const XP_PER_LEVEL = 5;
+
+        // --- 進化・レベルシステム ---
+        function getStats() {
+            // オブジェクトのキー数をカウント
+            const practiceCount = Object.keys(progressPractice).length;
+            const testCount = Object.keys(progressTest).length;
+            const totalXP = practiceCount + testCount;
+            
+            const level = Math.floor(totalXP / XP_PER_LEVEL) + 1;
+            const currentLevelXP = totalXP % XP_PER_LEVEL;
+            const nextLevelXP = XP_PER_LEVEL - currentLevelXP;
+            
+            return { level, totalXP, currentLevelXP, nextLevelXP };
+        }
+
+        function getMascot(level) {
+            // 5レベルごとに進化
+            if (level < 5) return "🥚";   // 卵
+            if (level < 10) return "🐣";  // ヒヨコ
+            if (level < 15) return "🐥";  // ヒヨコ（成長）
+            if (level < 20) return "🐓";  // ニワトリ
+            if (level < 25) return "🦉";  // フクロウ（博士）
+            if (level < 30) return "🦅";  // ワシ
+            if (level < 35) return "🦁";  // ライオン
+            if (level < 40) return "🦄";  // ユニコーン
+            if (level < 50) return "🐉";  // ドラゴン
+            return "🤴";                  // かんじマスター（神）
+        }
+
+        // 画面更新
+        function updateUI() {
+            const stats = getStats();
+            const mascot = getMascot(stats.level);
+            
+            // タイトル画面
+            document.getElementById('title-mascot').innerText = mascot;
+            document.getElementById('title-level').innerText = `Lv.${stats.level}`;
+
+            // リスト画面
+            document.getElementById('list-mascot').innerText = mascot;
+            document.getElementById('list-level').innerText = `Lv.${stats.level}`;
+            document.getElementById('next-xp').innerText = stats.nextLevelXP;
+            
+            // ゲージ更新
+            const percent = (stats.currentLevelXP / XP_PER_LEVEL) * 100;
+            document.getElementById('xp-bar').style.width = `${percent}%`;
+        }
 
         // 学年切り替え
         function setGrade(grade) {
             playSound('click');
             currentGrade = grade;
-            
-            // ボタンの見た目更新
             document.querySelectorAll('.grade-btn').forEach(btn => {
-                btn.classList.remove('selected');
-                if(parseInt(btn.innerText) === grade) btn.classList.add('selected');
+                btn.classList.toggle('selected', parseInt(btn.innerText) === grade);
             });
         }
 
@@ -391,8 +467,9 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             if (screenId === 'list-screen') {
-                document.getElementById('search-box').value = '';
                 renderList();
+            } else if (screenId === 'title-screen') {
+                updateUI();
             }
         }
 
@@ -403,212 +480,203 @@
             showScreen('list-screen');
         }
 
-        // 検索機能
+        // 検索・リスト描画
         function filterList() {
             renderList();
         }
 
-        // リスト描画
         function renderList() {
+            updateUI(); // ステータス更新
             const listData = allKanjiData[currentGrade];
             const searchText = document.getElementById('search-box').value.trim();
-            
-            let filteredList = listData;
-            if (searchText !== '') {
-                filteredList = listData.filter(item => {
-                    return item.char.includes(searchText) || (item.reading && item.reading.includes(searchText));
-                });
-            }
-
             const grid = document.getElementById('kanji-grid');
-            grid.innerHTML = '';
-            
             const badge = document.getElementById('mode-display');
-            const counter = document.getElementById('star-counter');
-            const totalCounter = document.getElementById('star-total');
             
-            let totalCleared = 0;
-            const targetProgress = (currentMode === 'practice') ? progressPractice : progressTest;
-            
-            // 現在の学年の達成数をカウント
-            listData.forEach(k => { if (targetProgress[k.char]) totalCleared++; });
-
+            // バッジ更新
             if (currentMode === 'practice') {
-                badge.textContent = `⭐ ${currentGrade}ねんせい れんしゅう`;
+                badge.innerText = `${currentGrade}ねんせい・れんしゅう`;
                 badge.style.backgroundColor = "#4CAF50";
             } else {
-                badge.textContent = `👑 ${currentGrade}ねんせい テスト`;
-                badge.style.backgroundColor = "#F44336";
+                badge.innerText = `${currentGrade}ねんせい・テスト`;
+                badge.style.backgroundColor = "#EF5350";
             }
-            counter.innerText = totalCleared;
-            totalCounter.innerText = listData.length; // 分母を動的に変更（上限なし）
 
-            if (filteredList.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align:center; color:#888;">みつかりません...</div>';
+            // フィルタリング
+            let filtered = listData;
+            if (searchText) {
+                filtered = listData.filter(item => 
+                    item.char.includes(searchText) || (item.reading && item.reading.includes(searchText))
+                );
+            }
+
+            grid.innerHTML = '';
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#888;">みつかりません...</div>';
                 return;
             }
 
-            filteredList.forEach(item => {
-                const isCleared = targetProgress[item.char];
+            const targetProgress = (currentMode === 'practice') ? progressPractice : progressTest;
+
+            filtered.forEach(item => {
                 const card = document.createElement('div');
-                card.className = `kanji-card`;
-                if (isCleared) card.classList.add(currentMode === 'practice' ? 'cleared-practice' : 'cleared-test');
+                card.className = 'kanji-card';
                 
-                card.innerHTML = `
-                    ${item.char}
-                    <div class="mark star-mark">⭐</div>
-                    <div class="mark crown-mark">👑</div>
-                `;
-                card.onclick = () => {
-                    playSound('click');
-                    startApp(item);
-                };
+                // クリア済みチェック
+                const isCleared = targetProgress[item.char];
+                
+                // マーク表示（練習クリア:★、テストクリア:👑）
+                let badgeHtml = '';
+                if (progressPractice[item.char]) badgeHtml += `<div class="mark-badge cleared-practice" style="display:flex;right:auto;left:-5px;"><span class="star-mark">⭐</span></div>`;
+                if (progressTest[item.char]) badgeHtml += `<div class="mark-badge cleared-test" style="display:flex;"><span class="crown-mark">👑</span></div>`;
+                
+                // 現在のモードでクリア済みなら背景色を変える
+                if (isCleared) {
+                    card.classList.add(currentMode === 'practice' ? 'cleared-practice' : 'cleared-test');
+                }
+
+                card.innerHTML = `${item.char}${badgeHtml}`;
+                card.onclick = () => { playSound('click'); startApp(item); };
                 grid.appendChild(card);
             });
         }
 
-        // アプリ開始
+        // --- 漢字書き取りアプリ本体 ---
         function startApp(item) {
             currentChar = item;
-            showScreen('practice-screen');
-            document.getElementById('result-overlay').classList.remove('active');
-
             const screen = document.getElementById('practice-screen');
+            screen.classList.toggle('test-mode', currentMode === 'test');
+            showScreen('practice-screen');
+            
+            // 表示リセット
+            document.getElementById('result-overlay').classList.remove('active');
+            document.getElementById('levelup-overlay').classList.remove('active');
+            
             const msgArea = document.getElementById('message-area');
             const readingDisplay = document.getElementById('current-reading');
             
             if (currentMode === 'test') {
-                screen.classList.add('test-bg');
                 msgArea.innerText = "この かんじ を かこう！";
-                msgArea.style.color = "#C62828";
-                readingDisplay.innerText = item.reading ? item.reading : "（よみなし）";
+                msgArea.style.color = "#D32F2F";
+                readingDisplay.innerText = item.reading ? item.reading.split('/')[0] : "（よみなし）";
             } else {
-                screen.classList.remove('test-bg');
                 msgArea.innerText = "うすいせんを なぞろう！";
                 msgArea.style.color = "#006064";
-                readingDisplay.innerText = `${item.char} (${item.reading ? item.reading : ''})`;
+                readingDisplay.innerText = `${item.char} (${item.reading || ''})`;
             }
 
-            document.getElementById('character-target-div').innerHTML = '';
-            document.getElementById('anim-star').style.display = 'none';
-            document.getElementById('anim-crown').style.display = 'none';
+            document.getElementById('character-target').innerHTML = '';
 
-            const isTest = (currentMode === 'test');
-
-            // HanziWriter 設定
-            writer = HanziWriter.create('character-target-div', item.char, {
+            writer = HanziWriter.create('character-target', item.char, {
                 width: 300, height: 300, padding: 10,
-                showOutline: !isTest, strokeAnimationSpeed: 1, delayBetweenStrokes: 200,
-                radicalColor: '#168F16', drawingWidth: 25, outlineColor: '#DDD',
-                strokeColor: '#333', highlightColor: '#FF7043', showHintAfterMisses: 1,
-                
+                showOutline: (currentMode === 'practice'), 
+                strokeAnimationSpeed: 1, 
+                delayBetweenStrokes: 200,
+                radicalColor: '#168F16', 
+                drawingWidth: 25, 
+                outlineColor: '#DDD',
+                strokeColor: '#333', 
+                highlightColor: '#FF7043', 
+                showHintAfterMisses: 1,
                 charDataLoader: (char, onComplete) => {
                     fetch(`https://cdn.jsdelivr.net/gh/chanind/hanzi-writer-data-jp@master/data/${char}.json`)
-                        .then(res => {
-                            if (!res.ok) throw new Error('JP Data not found');
-                            return res.json();
-                        })
-                        .then(data => onComplete(data))
-                        .catch(err => {
-                            console.log("Fallback to default");
-                            fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`)
-                                .then(res => res.json())
-                                .then(data => onComplete(data));
-                        });
+                    .then(r => r.json()).then(onComplete)
+                    .catch(() => {
+                        fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`)
+                        .then(r => r.json()).then(onComplete);
+                    });
                 }
             });
-            startQuiz();
-        }
-
-        // クイズ
-        function startQuiz() {
             writer.quiz({
-                onMistake: function() {
-                    playSound('error');
-                    const msg = document.getElementById('message-area');
-                    msg.innerText = (currentMode === 'test') ? "おしい！ ヒントをみてね" : "ここだよ！";
-                    msg.style.color = "#D32F2F";
-                },
-                onCorrectStroke: function() {
-                    playSound('success');
-                    const msg = document.getElementById('message-area');
-                    msg.innerText = "いいね！";
-                    msg.style.color = "#388E3C";
-                },
-                onComplete: function() {
-                    handleComplete();
-                }
+                onMistake: () => { playSound('error'); document.getElementById('message-area').innerText = "おしい！ここだよ"; },
+                onCorrectStroke: () => { playSound('success'); document.getElementById('message-area').innerText = "いいぞ！"; },
+                onComplete: handleComplete
             });
         }
 
-        // クリア処理
         function handleComplete() {
-            const msg = document.getElementById('message-area');
-            const resultTitle = document.getElementById('result-title-text');
-            
-            if (currentMode === 'practice') {
-                playSound('levelup');
-                msg.innerText = "できたー！ ⭐ゲット！";
-                resultTitle.innerText = "できたー！⭐";
-                resultTitle.style.color = "#4CAF50";
-                document.getElementById('anim-star').style.display = 'block';
-                progressPractice[currentChar.char] = true;
-                localStorage.setItem('kanjiMasterPractice', JSON.stringify(progressPractice));
+            playSound('complete');
+            const msg = document.getElementById('result-msg');
+            const icon = document.getElementById('result-icon');
+            const isPractice = (currentMode === 'practice');
+            const targetStorage = isPractice ? progressPractice : progressTest;
+            const storageKey = isPractice ? 'kanjiMasterPractice' : 'kanjiMasterTest';
+
+            // すでにクリア済みかどうか確認（経験値加算のため）
+            const isFirstClear = !targetStorage[currentChar.char];
+
+            // データ保存
+            targetStorage[currentChar.char] = true;
+            localStorage.setItem(storageKey, JSON.stringify(targetStorage));
+
+            // モーダル設定
+            if (isPractice) {
+                msg.innerText = "できたー！";
+                msg.style.color = "#4CAF50";
+                icon.innerText = "⭐";
             } else {
-                playSound('levelup');
-                msg.innerText = "すごい！！ 👑ゲット！";
-                resultTitle.innerText = "すごい！👑";
-                resultTitle.style.color = "#F44336";
-                document.getElementById('anim-crown').style.display = 'block';
-                progressTest[currentChar.char] = true;
-                localStorage.setItem('kanjiMasterTest', JSON.stringify(progressTest));
+                msg.innerText = "だいせいかい！";
+                msg.style.color = "#F44336";
+                icon.innerText = "👑";
             }
+
+            // 結果画面表示
             setTimeout(() => {
-                playSound('complete');
                 document.getElementById('result-overlay').classList.add('active');
-            }, 1000);
+                
+                // 初回クリアならレベルチェック
+                if (isFirstClear) {
+                    checkLevelUp();
+                }
+            }, 800);
         }
 
-        // ナビゲーション
+        function checkLevelUp() {
+            // 現在の経験値を取得（この時点でセーブ済み）
+            const stats = getStats();
+            
+            // レベルアップしたか判定（余りが0になった＝5の倍数に達した）
+            // ※厳密には「今回増えたことで閾値を超えたか」を見るべきだが、
+            // 1ずつしか増えないので mod 0 チェックでOK
+            if (stats.totalXP > 0 && stats.totalXP % XP_PER_LEVEL === 0) {
+                setTimeout(() => {
+                    // レベルアップ演出
+                    playSound('levelup');
+                    document.getElementById('result-overlay').classList.remove('active'); // 結果画面消す
+                    document.getElementById('levelup-overlay').classList.add('active'); // レベルアップ画面出す
+                    document.getElementById('new-level-num').innerText = stats.level;
+                    document.getElementById('levelup-mascot').innerText = getMascot(stats.level);
+                }, 1000);
+            }
+        }
+
+        function closeLevelUp() {
+            document.getElementById('levelup-overlay').classList.remove('active');
+            goNext();
+        }
+
         function goNext() {
-            const currentList = allKanjiData[currentGrade];
-            const currentIndex = currentList.findIndex(k => k.char === currentChar.char);
-            if (currentIndex >= 0 && currentIndex < currentList.length - 1) {
-                startApp(currentList[currentIndex + 1]);
+            const list = allKanjiData[currentGrade];
+            const idx = list.findIndex(k => k.char === currentChar.char);
+            if (idx >= 0 && idx < list.length - 1) {
+                startApp(list[idx + 1]);
             } else {
-                alert("この学年はこれでおしまい！ すごい！");
                 showScreen('list-screen');
             }
         }
         function retry() { startApp(currentChar); }
-        
+
         function resetData() {
-            const confirmBox = document.createElement('div');
-            confirmBox.id = 'reset-confirm-modal';
-            confirmBox.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:30px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.3);z-index:1000;text-align:center;font-family:inherit;max-width:300px;';
-            confirmBox.innerHTML = `
-                <div style="font-size:1.1rem;color:#333;margin-bottom:20px;">すべてのデータを けしますか？</div>
-                <div style="display:flex;gap:10px;justify-content:center;">
-                    <button onclick="confirmReset();" style="padding:10px 20px;background:#D32F2F;color:white;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-size:1rem;">はい</button>
-                    <button onclick="cancelReset();" style="padding:10px 20px;background:#999;color:white;border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-size:1rem;">いいえ</button>
-                </div>
-            `;
-            document.body.appendChild(confirmBox);
+            if(confirm("ほんとうに データを けしますか？\nレベルも 1 に もどります。")) {
+                localStorage.removeItem('kanjiMasterPractice');
+                localStorage.removeItem('kanjiMasterTest');
+                progressPractice = {};
+                progressTest = {};
+                location.reload();
+            }
         }
-        
-        function confirmReset() {
-            localStorage.removeItem('kanjiMasterPractice');
-            localStorage.removeItem('kanjiMasterTest');
-            progressPractice = {};
-            progressTest = {};
-            cancelReset();
-            renderList();
-        }
-        
-        function cancelReset() {
-            const modal = document.getElementById('reset-confirm-modal');
-            if (modal) modal.remove();
-        }
+
+        // 初期化
+        updateUI();
     </script>
  </body>
 </html>
