@@ -547,12 +547,749 @@
             renderList();
         }
 
+        <!doctype html>
+<html lang="ja">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>小学生 かんじマスター - 進化版</title>
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&amp;display=swap" rel="stylesheet">
+  <style>
+        /* --- 基本設定 --- */
+        body {
+            font-family: 'Mochiy Pop One', sans-serif;
+            background-color: #FFF3E0;
+            margin: 0; padding: 0;
+            min-height: 100vh; color: #4E342E;
+            overflow-x: hidden; touch-action: manipulation;
+            user-select: none; box-sizing: border-box;
+        }
+
+        /* 画面共通 */
+        .screen {
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            width: 100%; min-height: 100vh; padding: 20px;
+            box-sizing: border-box; opacity: 0; transition: opacity 0.3s;
+        }
+        .screen.active { display: flex; opacity: 1; }
+
+        /* --- タイトル画面 --- */
+        #title-screen { 
+            background: linear-gradient(135deg, #FFD54F 0%, #FFB74D 50%, #FFAB91 100%);
+            position: relative; overflow: hidden; padding-top: 40px; justify-content: flex-start;
+        }
+        .game-title {
+            font-size: 2.5rem; color: #FFF;
+            text-shadow: 4px 4px 0 #BF360C, -2px -2px 0 #FFE082;
+            text-align: center; margin-bottom: 5px; z-index: 2;
+            line-height: 1.2;
+        }
+        
+        /* マスコット表示エリア（タイトル） */
+        .title-mascot-container {
+            font-size: 4rem; margin: 5px 0;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            animation: float 3s ease-in-out infinite; z-index: 2;
+        }
+        .title-level-badge {
+            background: #FFF; color: #E65100;
+            padding: 5px 20px; border-radius: 20px;
+            font-size: 1.2rem; font-weight: bold;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            margin-bottom: 15px; z-index: 2;
+        }
+
+        /* タイトル画面の検索（新規追加） */
+        .home-search-area {
+            background: rgba(255,255,255,0.3);
+            padding: 10px; border-radius: 20px;
+            margin-bottom: 20px; width: 90%; max-width: 350px;
+            display: flex; gap: 5px; z-index: 2;
+        }
+        .home-search-input {
+            flex: 1; padding: 10px; border-radius: 15px; border: none;
+            font-family: inherit; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .home-search-btn {
+            background: #FF5722; color: white; border: none;
+            padding: 0 15px; border-radius: 15px; cursor: pointer;
+            font-family: inherit; font-weight: bold;
+            box-shadow: 0 3px 0 #BF360C;
+        }
+        .home-search-btn:active { transform: translateY(3px); box-shadow: none; }
+
+        /* 学年ボタン */
+        .grade-selector {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+            margin-bottom: 20px; z-index: 2; max-width: 350px;
+        }
+        .grade-btn {
+            width: 45px; height: 45px; border-radius: 50%;
+            border: 3px solid #FFF; background: #FFAB91;
+            color: white; font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            font-family: inherit; transition: all 0.2s;
+        }
+        .grade-btn.selected {
+            background: #FF5722; transform: scale(1.15);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4), 0 0 15px #FFF;
+            border-color: #FFEB3B;
+        }
+
+        /* モードボタン */
+        .mode-btn {
+            width: 280px; font-size: 1.4rem; padding: 12px 0;
+            border-radius: 50px; border: none; cursor: pointer;
+            margin: 8px 0; color: white; display: flex;
+            align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            font-family: inherit; transition: transform 0.1s; z-index: 2;
+        }
+        .mode-btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn-practice { background: linear-gradient(to bottom, #66BB6A, #43A047); }
+        .btn-test { background: linear-gradient(to bottom, #EF5350, #E53935); }
+
+        /* --- リスト画面（進化版） --- */
+        #list-screen { justify-content: flex-start; padding-top: 10px; background: #FFF8E1; }
+        
+        /* ステータスヘッダー */
+        .status-header {
+            background: white; width: 100%; max-width: 600px;
+            border-radius: 20px; padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 15px; position: sticky; top: 10px; z-index: 100;
+        }
+        /* リスト画面のホームボタン（新規追加） */
+        .home-icon-btn {
+            background: #B0BEC5; color: white; border: none;
+            width: 40px; height: 40px; border-radius: 50%;
+            font-size: 1.2rem; cursor: pointer; margin-right: 5px;
+            box-shadow: 0 3px 0 #78909C;
+        }
+        .home-icon-btn:active { transform: translateY(3px); box-shadow: none; }
+
+        .status-mascot { font-size: 3rem; animation: bounce 2s infinite; }
+        .status-info { flex: 1; }
+        .level-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+        .level-text { font-size: 1.2rem; font-weight: bold; color: #E65100; }
+        .exp-text { font-size: 0.8rem; color: #888; }
+        
+        /* 経験値バー */
+        .xp-bar-bg {
+            width: 100%; height: 12px; background: #EEE;
+            border-radius: 10px; overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .xp-bar-fill {
+            height: 100%; background: linear-gradient(90deg, #FFC107, #FF9800);
+            width: 0%; transition: width 0.5s ease-out;
+            border-radius: 10px;
+        }
+
+        /* 検索とモード表示 */
+        .controls-area {
+            width: 100%; max-width: 600px; margin-bottom: 15px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .search-container { position: relative; width: 100%; }
+        #search-box {
+            width: 100%; padding: 12px 15px; font-size: 1.1rem;
+            border: 2px solid #FFCC80; border-radius: 30px;
+            background: #FFF; font-family: inherit;
+            box-sizing: border-box; outline: none;
+            transition: border-color 0.3s;
+        }
+        #search-box:focus { border-color: #FF9800; box-shadow: 0 0 0 3px rgba(255,152,0,0.2); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+
+        .mode-badge {
+            text-align: center; padding: 5px; border-radius: 10px;
+            color: white; font-weight: bold; font-size: 0.9rem;
+            align-self: flex-start;
+        }
+
+        /* 漢字グリッド */
+        .kanji-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+            gap: 12px; width: 100%; max-width: 600px; padding-bottom: 60px;
+        }
+        .kanji-card {
+            background: #FFF; aspect-ratio: 1; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; cursor: pointer; position: relative;
+            box-shadow: 0 4px 0 #D7CCC8; border: 2px solid #FFE0B2;
+            transition: transform 0.1s;
+        }
+        .kanji-card:active { transform: translateY(4px); box-shadow: none; }
+        
+        /* クリアマーク */
+        .mark-badge {
+            position: absolute; top: -5px; right: -5px;
+            width: 24px; height: 24px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: none;
+        }
+        .cleared-practice { background: #E8F5E9; border-color: #4CAF50; }
+        .cleared-practice .star-mark { display: flex; background: #4CAF50; color: white; }
+        .cleared-test { background: #FFEBEE; border-color: #F44336; }
+        .cleared-test .crown-mark { display: flex; background: #F44336; color: white; }
+
+        /* --- 練習・テスト画面 --- */
+        #practice-screen { background: #E0F7FA; }
+        #practice-screen.test-mode { background: #FFEBEE; }
+        .nav-header {
+            width: 100%; max-width: 500px; display: flex;
+            justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .back-btn {
+            background: #78909C; color: white; border: none; padding: 8px 20px;
+            border-radius: 20px; font-family: inherit; font-size: 1rem;
+            box-shadow: 0 4px 0 #546E7A; cursor: pointer;
+        }
+        .back-btn:active { transform: translateY(4px); box-shadow: none; }
+
+        .canvas-area {
+            background: white; padding: 10px; border-radius: 25px;
+            box-shadow: 0 10px 0 #B0BEC5, 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px; position: relative;
+        }
+        #character-target { width: 300px; height: 300px; touch-action: none; }
+        
+        .message-box {
+            background: white; padding: 10px 20px; border-radius: 15px;
+            font-size: 1.2rem; font-weight: bold; color: #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); min-width: 200px; text-align: center;
+        }
+
+        /* --- 結果・レベルアップモーダル --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 200; backdrop-filter: blur(5px);
+        }
+        .overlay.active { display: flex; animation: fadeIn 0.3s; }
+
+        .result-card {
+            background: white; width: 85%; max-width: 320px;
+            border-radius: 25px; padding: 30px 20px;
+            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .levelup-anim-container { text-align: center; color: white; }
+        .levelup-text {
+            font-size: 3rem; color: #FFD700; text-shadow: 0 0 20px #FF6F00;
+            margin-bottom: 20px; animation: glow 1s infinite alternate;
+        }
+        .new-mascot-reveal { font-size: 8rem; animation: spinPop 1s ease-out; }
+        
+        /* 汎用ボタン */
+        .action-btn {
+            width: 100%; padding: 12px; margin: 8px 0; border: none;
+            border-radius: 15px; font-size: 1.1rem; color: white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2); font-family: inherit; cursor: pointer;
+        }
+        .btn-next { background: #4CAF50; }
+        .btn-retry { background: #FF9800; }
+        
+        /* アニメーション定義 */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes spinPop { 0% { transform: scale(0) rotate(-180deg); } 100% { transform: scale(1) rotate(0deg); } }
+        @keyframes glow { from { text-shadow: 0 0 10px #FF6F00; } to { text-shadow: 0 0 30px #FFFF00, 0 0 10px white; } }
+
+  </style>
+ </head>
+ <body>
+
+  <div id="title-screen" class="screen active">
+   <div class="game-title">かんじ<br>マスター</div>
+   
+   <div class="title-mascot-container" id="title-mascot">🥚</div>
+   <div class="title-level-badge" id="title-level">Lv.1</div>
+
+   <div class="home-search-area">
+       <input type="text" id="home-search-input" class="home-search-input" placeholder="かんじ を さがす...">
+       <button class="home-search-btn" onclick="handleHomeSearch()">さがす</button>
+   </div>
+
+   <div class="grade-selector">
+    <button class="grade-btn selected" onclick="setGrade(1)">1</button>
+    <button class="grade-btn" onclick="setGrade(2)">2</button>
+    <button class="grade-btn" onclick="setGrade(3)">3</button>
+    <button class="grade-btn" onclick="setGrade(4)">4</button>
+    <button class="grade-btn" onclick="setGrade(5)">5</button>
+    <button class="grade-btn" onclick="setGrade(6)">6</button>
+   </div>
+
+   <button class="mode-btn btn-practice" onclick="selectMode('practice')">
+       <span>⭐</span> れんしゅう (＋1 XP)
+   </button>
+   <button class="mode-btn btn-test" onclick="selectMode('test')">
+       <span>👑</span> テスト (＋1 XP)
+   </button>
+  </div>
+
+  <div id="list-screen" class="screen">
+   <div class="status-header">
+       <button class="home-icon-btn" onclick="showScreen('title-screen')">🏠</button>
+       
+       <div class="status-mascot" id="list-mascot">🥚</div>
+       <div class="status-info">
+           <div class="level-row">
+               <span class="level-text" id="list-level">Lv.1</span>
+               <span class="exp-text">つぎのレベルまで <span id="next-xp">5</span></span>
+           </div>
+           <div class="xp-bar-bg">
+               <div class="xp-bar-fill" id="xp-bar"></div>
+           </div>
+       </div>
+   </div>
+
+   <div class="controls-area">
+       <div class="mode-badge" id="mode-display" style="background:#4CAF50;">1ねんせい・れんしゅう</div>
+       <div class="search-container">
+           <input type="text" id="search-box" placeholder="けんさく（よみ・かんじ）" oninput="filterList()">
+           <span class="search-icon">🔍</span>
+       </div>
+   </div>
+
+   <div class="kanji-grid" id="kanji-grid"></div>
+   
+   <button class="back-btn" onclick="showScreen('title-screen')" style="margin-top:20px; background:#B0BEC5;">
+       タイトルへもどる
+   </button>
+   <button onclick="resetData()" style="margin-top:20px; border:none; background:none; color:#AAA; font-size:0.8rem; text-decoration:underline;">データを消す</button>
+  </div>
+
+  <div id="practice-screen" class="screen">
+   <div class="nav-header">
+    <button class="back-btn" onclick="showScreen('list-screen')">もどる</button>
+    <div id="current-reading" style="font-size:1.5rem; font-weight:bold; color:#006064;">よみ</div>
+    <div style="width:50px;"></div>
+   </div>
+   
+   <div class="canvas-area">
+    <div id="character-target"></div>
+   </div>
+   
+   <div class="message-box" id="message-area">なぞってみよう！</div>
+   <button class="nav-btn" onclick="retry()" style="background:#FF7043; color:white; border:none; padding:8px 20px; border-radius:20px; margin-top:15px; font-family:inherit; box-shadow:0 3px 0 #D84315;">書き直す</button>
+  </div>
+
+  <div id="result-overlay" class="overlay">
+   <div class="result-card">
+    <div style="font-size:3rem; margin-bottom:10px;" id="result-icon">⭐</div>
+    <h2 id="result-msg" style="margin:0 0 20px 0; color:#4CAF50;">できた！</h2>
+    <div style="font-size:1.2rem; margin-bottom:20px; font-weight:bold; color:#FF9800;">
+        けいけんち +1 GET!
+    </div>
+    <button class="action-btn btn-next" onclick="goNext()">つぎへ ▶</button>
+    <button class="action-btn btn-retry" onclick="retry()">もういちど ↺</button>
+    <button class="action-btn" style="background:#78909C;" onclick="showScreen('list-screen')">いちらんへ 🏠</button>
+   </div>
+  </div>
+
+  <div id="levelup-overlay" class="overlay">
+      <div class="levelup-anim-container">
+          <div class="levelup-text">LEVEL UP!</div>
+          <div class="new-mascot-reveal" id="levelup-mascot">🐣</div>
+          <div style="font-size:1.5rem; margin-top:20px;">
+              レベル <span id="new-level-num">2</span> になった！<br>
+              マスコットが しんか したよ！
+          </div>
+          <button class="action-btn" style="background:#FF9800; margin-top:30px; width:200px;" onclick="closeLevelUp()">やったー！</button>
+      </div>
+  </div>
+
+  <script>
+        // --- 全学年漢字データ（圧縮形式） ---
+        const compressedKanjiData = {
+            1: "一:イチ/ひと-つ,二:ニ/ふた-つ,三:サン/みっ-つ,四:シ/よん,五:ゴ/いつ-つ,六:ロク/ろっ-つ,七:シチ/なな,八:ハチ/やっ-つ,九:キュウ/ここの-つ,十:ジュウ/とお,人:ジン/ひと,日:ニチ/ひ,月:ゲツ/つき,火:カ/ひ,水:スイ/みず,木:モク/き,金:キン/かね,土:ド/つち,上:ジョウ/うえ,下:カ/した,左:サ/ひだり,右:ウ/みぎ,中:チュウ/なか,大:ダイ/おお-きい,小:ショウ/ちい-さい,山:サン/やま,川:セン/かわ,田:デン/た,口:コウ/くち,目:モク/め,耳:ジ/みみ,手:シュ/て,足:ソク/あし,力:リョク/ちから,女:ジョ/おんな,男:ダン/おとこ,子:シ/こ,学:ガク/まな-ぶ,校:コウ,先:セン/さき,生:セイ/い-きる,名:メイ/な,字:ジ/あざ,文:ブン/ふみ,本:ホン/もと,正:セイ/ただ-しい,白:ハク/しろ,青:セイ/あお,赤:セキ/あか,花:カ/はな,草:ソウ/くさ,林:リン/はやし,森:シン/もり,空:クウ/そら,天:テン/あめ,雨:ウ/あめ,石:セキ/いし,車:シャ/くるま,音:オン/おと,円:エン/まる,王:オウ,玉:ギョク/たま,虫:チュウ/むし,町:チョウ/まち,村:ソン/むら,竹:チク/たけ,早:ソウ/はや-い,立:リツ/た-つ,見:ケン/み-る,貝:バイ/かい,気:キ,休:キュウ/やす-む,糸:シ/いと,入:ニュウ/はい-る,出:シュツ/で-る,犬:ケン/いぬ,夕:セキ/ゆう,千:セン/ち,百:ヒャク,年:ネン/とし",
+            2: "引:イン/ひ-く,羽:ウ/は,雲:ウン/くも,園:エン/その,遠:エン/とお-い,何:カ/なに,科:カ,夏:カ/なつ,家:カ/いえ,歌:カ/うた,画:ガ/かく,回:カイ/まわ-る,会:カイ/あ-う,海:カイ/うみ,絵:カイ/え,外:ガイ/そと,角:カク/つの,楽:ガク/たの-しい,活:カツ,間:カン/あいだ,丸:ガン/まる,岩:ガン/いわ,顔:ガン/かお,汽:キ,記:キ/しる-す,帰:キ/かえ-る,弓:キュウ/ゆみ,牛:ギュウ/うし,魚:ギョ/さかな,京:キョウ,強:キョウ/つよ-い,教:キョウ/おし-える,近:キン/ちか-い,兄:ケイ/あに,形:ケイ/かたち,計:ケイ/はか-る,元:ゲン/もと,言:ゲン/い-う,原:ゲン/はら,戸:コ/と,古:コ/ふる-い,午:ゴ,後:ゴ/あと,語:ゴ/かた-る,工:コウ,公:コウ,広:コウ/ひろ-い,交:コウ/まじ-わる,光:コウ/ひか-る,考:コウ/かんが-える,行:コウ/い-く,高:コウ/たか-い,黄:コウ/き,合:ゴウ/あ-う,谷:コク/たに,国:コク/くに,黒:コク/くろ,今:コン/いま,才:サイ,細:サイ/ほそ-い,作:サク/つく-る,算:サン,止:シ/と-まる,市:シ/いち,矢:シ/や,姉:シ/あね,思:シ/おも-う,紙:シ/かみ,寺:ジ/てら,自:ジ/みずか-ら,時:ジ/とき,室:シツ,社:シャ/やしろ,弱:ジャク/よわ-い,首:シュ/くび,秋:シュウ/あき,週:シュウ,春:シュン/はる,書:ショ/か-く,少:ショウ/すく-ない,場:ジョウ/ば,色:ショク/いろ,食:ショク/た-べる,心:シン/こころ,新:シン/あたら-しい,親:シン/おや,図:ズ/はか-る,数:スウ/かず,西:セイ/にし,声:セイ/こえ,星:セイ/ほし,晴:セイ/は-れる,切:セツ/き-る,雪:セツ/ゆき,船:セン/ふね,線:セン,前:ゼン/まえ,組:ソ/く-む,走:ソウ/はし-る,多:タ/おお-い,太:タイ/ふと-い,体:タイ/からだ,台:ダイ,地:チ,池:チ/いけ,知:チ/し-る,茶:チャ,昼:チュウ/ひる,長:チョウ/なが-い,鳥:チョウ/とり,朝:チョウ/あさ,直:チョク/なお-す,通:ツウ/とお-る,弟:テイ/おとうと,店:テン/みせ,点:テン,電:デン,刀:トウ/かたな,冬:トウ/ふゆ,当:トウ/あ-たる,東:トウ/ひがし,答:トウ/こた-え,頭:トウ/あたま,同:ドウ/おな-じ,道:ドウ/みち,読:ドク/よ-む,内:ナイ/うち,南:ナン/みなみ,肉:ニク,馬:バ/うま,売:バイ/う-る,買:バイ/か-う,麦:バク/むぎ,半:ハン/なか-ば,番:バン,父:フ/ちち,風:フウ/かぜ,分:ブン/わ-ける,聞:ブン/き-く,米:ベイ/こめ,歩:ホ/ある-く,母:ボ/はは,方:ホウ/かた,北:ホク/きた,毎:マイ,妹:マイ/いもうと,万:マン,明:メイ/あか-るい,鳴:メイ/な-く,毛:モウ/け,門:モン,夜:ヤ/よる,野:ヤ/の,友:ユウ/とも,用:ヨウ/もち-いる,曜:ヨウ,来:ライ/く-る,里:リ/さと,理:リ,話:ワ/はなし",
+            3: "悪:アク/わる-い,安:アン/やす-い,暗:アン/くら-い,医:イ,委:イ/ゆだ-ねる,意:イ,育:イク/そだ-つ,員:イン,院:イン,飲:イン/の-む,運:ウン/はこ-ぶ,泳:エイ/およ-ぐ,駅:エキ,央:オウ,横:オウ/よこ,屋:オク/や,温:オン/あたた-かい,化:カ/ば-ける,荷:カ/に,界:カイ,開:カイ/ひら-く,階:カイ,寒:カン/さむ-い,感:カン,漢:カン,館:カン,岸:ガン/きし,起:キ/お-きる,期:キ,客:キャク,究:キュウ/きわ-める,急:キュウ/いそ-ぐ,級:キュウ,宮:キュウ/みや,球:キュウ/たま,去:キョ/さ-る,橋:キョウ/はし,業:ギョウ/わざ,曲:キョク/ま-がる,局:キョク,銀:ギン,区:ク,苦:ク/くる-しい,具:グ,君:クン/きみ,係:ケイ/かかり,軽:ケイ/かる-い,血:ケツ/ち,決:ケツ/き-める,研:ケン/と-ぐ,県:ケン,庫:コ,湖:コ/みずうみ,向:コウ/む-かう,幸:コウ/しあわ-せ,港:コウ/みなと,号:ゴウ,根:コン/ね,祭:サイ/まつ-り,皿:サラ,仕:シ/つか-える,死:シ/し-ぬ,使:シ/つか-う,始:シ/はじ-める,指:シ/ゆび,歯:シ/は,詩:シ,次:ジ/つぎ,事:ジ/こと,持:ジ/も-つ,式:シキ,実:ジツ/み,写:シャ/うつ-す,者:シャ/もの,主:シュ/ぬし,守:シュ/まも-る,取:シュ/と-る,酒:シュ/さけ,受:ジュ/う-ける,州:シュウ,拾:シュウ/ひろ-う,終:シュウ/お-わる,習:シュウ/なら-う,集:シュウ/あつ-める,住:ジュウ/す-む,重:ジュウ/おも-い,宿:シュク/やど,所:ショ/ところ,暑:ショ/あつ-い,助:ジョ/たす-ける,昭:ショウ,消:ショウ/き-える,商:ショウ/あきな-う,章:ショウ,勝:ショウ/か-つ,乗:ジョウ/の-る,植:ショク/う-える,申:シン/もう-す,身:シン/み,神:シン/かみ,真:シン/ま,深:シン/ふか-い,進:シン/すす-む,世:セイ/よ,整:セイ/ととの-える,昔:セキ/むかし,全:ゼン/すべ-て,相:ソウ/あい,送:ソウ/おく-る,想:ソウ,息:ソク/いき,速:ソク/はや-い,族:ゾク,他:タ/ほか,打:ダ/う-つ,対:タイ,待:タイ/ま-つ,代:ダイ/か-わる,第:ダイ,題:ダイ,炭:タン/すみ,短:タン/みじか-い,談:ダン,着:チャク/き-る,注:チュウ/そそ-ぐ,柱:チュウ/はしら,丁:チョウ,帳:チョウ,調:チョウ/しら-べる,追:ツイ/お-う,定:テイ/さだ-める,庭:テイ/にわ,笛:テキ/ふえ,鉄:テツ,転:テン/ころ-ぶ,都:ト/みやこ,度:ド/たび,投:トウ/な-げる,豆:トウ/まめ,島:トウ/しま,湯:トウ/ゆ,登:トウ/のぼ-る,等:トウ/ひと-しい,動:ドウ/うご-く,童:ドウ/わらべ,農:ノウ,波:ハ/なみ,配:ハイ/くば-る,倍:バイ,箱:ハコ,畑:はたけ,発:ハツ,反:ハン/そ-る,坂:ハン/さか,板:ハン/いた,皮:ヒ/かわ,悲:ヒ/かな-しい,美:ビ/うつく-しい,鼻:ビ/はな,筆:ヒツ/ふで,氷:ヒョウ/こおり,表:ヒョウ/おもて,秒:ビョウ,病:ビョウ/やまい,品:ヒン/しな,負:フ/ま-ける,部:ブ,服:フク,福:フク,物:ブツ/もの,平:ヘイ/たい-ら,返:ヘン/かえ-す,勉:ベン,放:ホウ/はな-す,味:ミ/あじ,命:メイ/いのち,面:メン/おも,問:モン/と-う,役:ヤク,薬:ヤク/くすり,由:ユ/よし,油:ユ/あぶら,有:ユウ/あ-る,遊:ユウ/あそ-ぶ,予:ヨ,羊:ヨウ/ひつじ,洋:ヨウ,葉:ヨウ/は,陽:ヨウ/ひ,様:ヨウ/さま,落:ラク/お-ちる,流:リュウ/なが-れる,旅:リョ/たび,両:リョウ,緑:リョク/みどり,礼:レイ,列:レツ,練:レン/ね-る,路:ロ/じ,和:ワ/やわ-らぐ",
+            4: "愛:アイ,案:アン,以:イ,衣:イ/ころも,位:イ/くらい,囲:イ/かこ-む,胃:イ,印:イン/しるし,英:エイ,栄:エイ/さか-える,塩:エン/しお,億:オク,加:カ/くわ-える,果:カ/は-たす,貨:カ,課:カ,芽:ガ/め,改:カイ/あらた-める,械:カイ,害:ガイ,各:カク/おのおの,覚:カク/おぼ-える,完:カン,官:カン,管:カン/くだ,関:カン/せき,観:カン/み-る,願:ガン/ねが-う,希:キ,季:キ,紀:キ,喜:キ/よろこ-ぶ,旗:キ/はた,器:キ/うつわ,機:キ,議:ギ,求:キュウ/もと-める,泣:キュウ/な-く,救:キュウ/すく-う,給:キュウ/たま-う,挙:キョ/あ-げる,漁:ギョ,共:キョウ/とも,協:キョウ,鏡:キョウ/かがみ,競:キョウ/きそ-う,極:キョク/きわ-める,訓:クン,軍:グン,郡:グン,径:ケイ,型:ケイ/かた,景:ケイ,芸:ゲイ,欠:ケツ/か-ける,結:ケツ/むす-ぶ,建:ケン/た-てる,健:ケン/すこ-やか,験:ケン,固:コ/かた-める,候:コウ,功:コウ,好:コウ/す-き,札:サツ/ふだ,刷:サツ/す-る,殺:サツ/ころ-す,察:サツ,参:サン/まい-る,産:サン/う-む,散:サン/ち-る,残:ザン/のこ-る,士:シ,氏:シ/うじ,史:シ,司:シ,試:シ/こころ-みる,児:ジ,治:ジ/おさ-める,辞:ジ/や-める,失:シツ/うしな-う,借:シャク/か-りる,種:シュ/たね,周:シュウ/まわ-り,祝:シュク/いわ-う,順:ジュン,初:ショ/はじ-め,松:ショウ/まつ,笑:ショウ/わら-う,唱:ショウ/とな-える,焼:ショウ/や-く,象:ショウ,照:ショウ/て-らす,賞:ショウ,臣:シン,信:シン/しん-じる,成:セイ/な-る,省:セイ/はぶ-く,清:セイ/きよ-い,静:セイ/しず-か,席:セキ,積:セキ/つ-む,折:セツ/お-る,節:セツ/ふし,説:セツ/と-く,浅:セン/あさ-い,戦:セン/たたか-う,選:セン/えら-ぶ,然:ゼン,争:ソウ/あらそ-う,倉:ソウ/くら,巣:ソウ/す,束:ソク/たば,側:ソク/がわ,続:ゾク/つづ-く,卒:ソツ,孫:ソン/まご,帯:タイ/おび,隊:タイ,達:タツ,単:タン,置:チ/お-く,仲:チュウ/なか,貯:チョ,兆:チョウ/きざ-し,腸:チョウ,低:テイ/ひく-い,底:テイ/そこ,停:テイ,的:テキ/まと,典:テン,伝:デン/つた-える,徒:ト,努:ド/つと-める,灯:トウ/ひ,堂:ドウ,働:ドウ/はたら-く,特:トク,得:トク/え-る,毒:ドク,熱:ネツ/あつ-い,念:ネン,敗:ハイ/やぶ-る,梅:バイ/うめ,博:ハク,飯:ハン/めし,飛:ヒ/と-ぶ,費:ヒ/つい-やす,必:ヒツ/かなら-ず,票:ヒョウ,標:ヒョウ/しるべ,不:フ,夫:フ/おっと,付:フ/つ-く,府:フ,副:フク,粉:フン/こな,兵:ヘイ/つわもの,別:ベツ/わか-れる,辺:ヘン/あた-り,変:ヘン/か-わる,便:ベン/たよ-り,包:ホウ/つつ-む,法:ホウ,望:ボウ/のぞ-む,牧:ボク/まき,末:マツ/すえ,満:マン/み-ちる,未:ミ/いま-だ,脈:ミャク,民:ミン/たみ,無:ム/な-い,約:ヤク,勇:ユウ/いさ-む,要:ヨウ/い-る,養:ヨウ/やしな-う,浴:ヨク/あ-びる,利:リ/き-く,陸:リク,良:リョウ/よ-い,料:リョウ,量:リョウ/はか-る,輪:リン/わ,類:ルイ,令:レイ,冷:レイ/つめ-たい,例:レイ/たと-える,歴:レキ,連:レン/つら-なる,老:ロウ/お-いる,労:ロウ,録:ロク",
+            5: "圧:アツ,移:イ/うつ-る,因:イン/よ-る,永:エイ/なが-い,営:エイ/いとな-む,衛:エイ,易:エキ/やさ-しい,益:エキ,液:エキ,演:エン,応:オウ,往:オウ,桜:オウ/さくら,恩:オン,可:カ,仮:カ/かり,価:カ/あたい,河:カ/かわ,過:カ/す-ぎる,賀:ガ,快:カイ/こころよ-い,解:カイ/と-く,格:カク,確:カク/たし-か,額:ガク/ひたい,刊:カン,幹:カン/みき,慣:カン/な-れる,眼:ガン/まなこ,基:キ/もと,寄:キ/よ-る,規:キ,技:ギ/わざ,義:ギ,逆:ギャク/さか,久:キュウ/ひさ-しい,旧:キュウ,居:キョ/い-る,許:キョ/ゆる-す,境:キョウ/さかい,均:キン,禁:キン,句:ク,群:グン/む-れる,経:ケイ/へ-る,潔:ケツ/いさぎよ-い,件:ケン,券:ケン,険:ケン/けわ-しい,検:ケン,限:ゲン/かぎ-る,現:ゲン/あらわ-れる,減:ゲン/へ-る,故:コ/ゆえ,個:コ,護:ゴ/まも-る,効:コウ/き-く,厚:コウ/あつ-い,耕:コウ/たがや-す,鉱:コウ,構:コウ/かま-える,興:コウ/おこ-す,講:コウ,混:コン/ま-ぜる,査:サ,再:サイ/ふたた-び,災:サイ/わざわ-い,妻:サイ/つま,採:サイ/と-る,際:サイ/きわ,在:ザイ/あ-る,財:ザイ,罪:ザイ/つみ,雑:ザツ,酸:サン/す-い,賛:サン,支:シ/ささ-える,志:シ/こころざし,枝:シ/えだ,師:シ,資:シ,飼:シ/か-う,示:ジ/しめ-す,似:ジ/に-る,識:シキ,質:シツ,舎:シャ,謝:シャ/あやま-る,授:ジュ/さず-ける,修:シュウ/おさ-める,述:ジュツ/の-べる,術:ジュツ/すべ,準:ジュン,序:ジョ,招:ショウ/まね-く,承:ショウ/うけたまわ-る,証:ショウ,条:ジョウ,状:ジョウ,常:ジョウ/つね,情:ジョウ/なさ-け,織:ショク/お-る,職:ショク,制:セイ,性:セイ,政:セイ/まつりごと,勢:セイ/いきお-い,精:セイ,製:セイ,税:ゼイ,責:セキ/せ-める,績:セキ,接:セツ/つ-ぐ,設:セツ/もう-ける,舌:ゼツ/した,絶:ゼツ/た-える,銭:セン/ぜに,祖:ソ,素:ソ/もと,総:ソウ/すべ-て,造:ゾウ/つく-る,像:ゾウ,増:ゾウ/ま-す,則:ソク,測:ソク/はか-る,属:ゾク,率:ソツ/ひき-いる,損:ソン/そこ-なう,退:タイ/しりぞ-く,貸:タイ/か-す,態:タイ,団:ダン,断:ダン/ことわ-る,築:チク/きず-く,張:チョウ/は-る,提:テイ/さ-げる,程:テイ/ほど,適:テキ,敵:テキ/かたき,統:トウ/す-べる,銅:ドウ,導:ドウ/みちび-く,徳:トク,独:ドク/ひと-り,任:ニン/まか-せる,燃:ネン/も-える,能:ノウ,破:ハ/やぶ-る,犯:ハン/おか-す,判:ハン,版:ハン,比:ヒ/くら-べる,肥:ヒ/こ-える,非:ヒ,備:ビ/そな-える,俵:ヒョウ/たわら,評:ヒョウ,貧:ヒン/まず-しい,布:フ/ぬの,婦:フ,富:フ/と-む,武:ブ,復:フク,複:フク,仏:ブツ/ほとけ,編:ヘン/あ-む,弁:ベン,保:ホ/たも-つ,墓:ボ/はか,報:ホウ/むく-いる,豊:ホウ/ゆた-か,防:ボウ/ふせ-ぐ,貿:ボウ,暴:ボウ/あば-れる,務:ム/つと-める,夢:ム/ゆめ,迷:メイ/まよ-う,綿:メン/わた,輸:ユ,余:ヨ/あま-る,預:ヨ/あず-ける,容:ヨウ,略:リャク,留:リュウ/と-まる,領:リョウ",
+            6: "異:イ/こと,遺:イ,域:イキ,宇:ウ,映:エイ/うつ-る,延:エン/の-びる,沿:エン/そ-う,我:ガ/われ,灰:カイ/はい,拡:カク,革:カク/かわ,閣:カク,割:カツ/わ-る,株:カブ,干:カン/ほ-す,巻:カン/ま-く,看:カン,簡:カン,危:キ/あぶ-ない,机:キ/つくえ,揮:キ,貴:キ/とうと-い,疑:ギ/うたが-う,吸:キュウ/す-う,供:キョウ/とも,胸:キョウ/むね,郷:キョウ,勤:キン/つと-める,筋:キン/すじ,系:ケイ,敬:ケイ/うやま-う,警:ケイ,劇:ゲキ,激:ゲキ/はげ-しい,穴:ケツ/あな,絹:ケン/きぬ,権:ケン,憲:ケン,源:ゲン/みなもと,厳:ゲン/きび-しい,己:コ/おのれ,呼:コ/よ-ぶ,誤:ゴ/あやま-る,后:コウ,孝:コウ,皇:コウ,紅:コウ/べに,降:コウ/お-りる,鋼:コウ/はがね,刻:コク/きざ-む,穀:コク,骨:コツ/ほね,困:コン/こま-る,砂:サ/すな,座:ザ/すわ-る,済:サイ/す-む,裁:サイ/さば-く,策:サク,冊:サツ,蚕:サン/かいこ,至:シ/いた-る,私:シ/わたし,姿:シ/すがた,視:シ,詞:シ,誌:シ,磁:ジ,射:シャ/い-る,捨:シャ/す-てる,尺:シャク,若:ジャク/わか-い,樹:ジュ,収:シュウ/おさ-める,宗:シュウ,就:シュウ/つ-く,衆:シュウ,従:ジュウ/したが-う,縦:ジュウ/たて,縮:シュク/ちぢ-む,熟:ジュク/う-れる,純:ジュン,処:ショ,署:ショ,諸:ショ,除:ジョ/のぞ-く,将:ショウ,傷:ショウ/きず,障:ショウ/さわ-る,城:ジョウ/しろ,蒸:ジョウ/む-す,針:シン/はり,仁:ジン,垂:スイ/た-れる,推:スイ/お-す,寸:スン,盛:セイ/も-る,聖:セイ,誠:セイ/まこと,宣:セン,専:セン/もっぱ-ら,泉:セン/いずみ,洗:セン/あら-う,染:セン/そ-める,善:ゼン/よ-い,奏:ソウ/かな-でる,窓:ソウ/まど,創:ソウ/つく-る,装:ソウ/よそお-う,層:ソウ,操:ソウ/あやつ-る,蔵:ゾウ/くら,臓:ゾウ,存:ゾン,尊:ソン/とうと-い,宅:タク,担:タン/かつ-ぐ,探:タン/さが-す,誕:タン,段:ダン,暖:ダン/あたた-かい,値:チ/あたい,宙:チュウ,忠:チュウ,著:チョ/あらわ-す,庁:チョウ,頂:チョウ/いただき,潮:チョウ/しお,賃:チン,痛:ツウ/いた-い,展:テン,討:トウ/う-つ,党:トウ,糖:トウ,届:トド/とど-く,難:ナン/むずか-しい,乳:ニュウ/ちち,認:ニン/みと-める,納:ノウ/おさ-める,脳:ノウ,派:ハ,拝:ハイ/おが-む,背:ハイ/せ,肺:ハイ,俳:ハイ,班:ハン,晩:バン,否:ヒ,批:ヒ,秘:ヒ/ひ-める,腹:フク/はら,奮:フン/ふる-う,並:ヘイ/なら-ぶ,陛:ヘイ,閉:ヘイ/し-める,片:ヘン/かた,補:ホ/おぎな-う,暮:ボ/く-らす,宝:ホウ/たから,訪:ホウ/おとず-れる,亡:ボウ/な-く,忘:ボウ/わす-れる,棒:ボウ,枚:マイ,幕:マク,密:ミツ,盟:メイ,模:モ,訳:ヤク/わけ,郵:ユウ,優:ユウ/やさ-しい,幼:ヨウ/おさな-い,欲:ヨク/ほっ-する,翌:ヨク,乱:ラン/みだ-れる,卵:ラン/たまご,覧:ラン,裏:リ/うら,律:リツ,臨:リン/のぞ-む,朗:ロウ/ほが-らか,論:ロン"
+        };
+
+        // --- データ展開 ---
+        function parseCompressedData(grade, compressedString) {
+            return compressedString.split(',').map(item => {
+                const [char, reading] = item.split(':');
+                return { char, reading };
+            });
+        }
+        const allKanjiData = {};
+        for (let g = 1; g <= 6; g++) {
+            if (compressedKanjiData[g]) {
+                allKanjiData[g] = parseCompressedData(g, compressedKanjiData[g]);
+            }
+        }
+
+        // --- 効果音システム ---
+        let audioContext;
+        function playSound(type) {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioContext.currentTime;
+            
+            // 汎用発振器
+            const createOsc = (freq, type, dur, vol = 0.1) => {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, now);
+                gain.gain.setValueAtTime(vol, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + dur);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start(now);
+                osc.stop(now + dur);
+            };
+
+            switch(type) {
+                case 'success': createOsc(800, 'sine', 0.2); break;
+                case 'click': createOsc(400, 'triangle', 0.1, 0.05); break;
+                case 'error': createOsc(150, 'sawtooth', 0.3); break;
+                case 'complete': 
+                    createOsc(500, 'sine', 0.1); 
+                    setTimeout(() => createOsc(800, 'sine', 0.3), 100);
+                    break;
+                case 'levelup': // ファンファーレ
+                    const melody = [523, 659, 783, 1046, 783, 1046];
+                    melody.forEach((f, i) => {
+                        const o = audioContext.createOscillator();
+                        const g = audioContext.createGain();
+                        o.type = 'square';
+                        o.frequency.value = f;
+                        g.gain.setValueAtTime(0.1, now + i*0.1);
+                        g.gain.exponentialRampToValueAtTime(0.01, now + i*0.1 + 0.3);
+                        o.connect(g);
+                        g.connect(audioContext.destination);
+                        o.start(now + i*0.1);
+                        o.stop(now + i*0.1 + 0.3);
+                    });
+                    break;
+            }
+        }
+
+        // --- 状態管理 ---
+        let progressPractice = JSON.parse(localStorage.getItem('kanjiMasterPractice')) || {};
+        let progressTest = JSON.parse(localStorage.getItem('kanjiMasterTest')) || {};
+        let writer;
+        let currentChar = null;
+        let currentMode = 'practice';
+        let currentGrade = 1;
+        
+        // レベル計算定数
+        const XP_PER_LEVEL = 5;
+
+        // --- 進化・レベルシステム ---
+        function getStats() {
+            // オブジェクトのキー数をカウント
+            const practiceCount = Object.keys(progressPractice).length;
+            const testCount = Object.keys(progressTest).length;
+            const totalXP = practiceCount + testCount;
+            
+            const level = Math.floor(totalXP / XP_PER_LEVEL) + 1;
+            const currentLevelXP = totalXP % XP_PER_LEVEL;
+            const nextLevelXP = XP_PER_LEVEL - currentLevelXP;
+            
+            return { level, totalXP, currentLevelXP, nextLevelXP };
+        }
+
+        function getMascot(level) {
+            // 5レベルごとに進化
+            if (level < 5) return "🥚";   // 卵
+            if (level < 10) return "🐣";  // ヒヨコ
+            if (level < 15) return "🐥";  // ヒヨコ（成長）
+            if (level < 20) return "🐓";  // ニワトリ
+            if (level < 25) return "🦉";  // フクロウ（博士）
+            if (level < 30) return "🦅";  // ワシ
+            if (level < 35) return "🦁";  // ライオン
+            if (level < 40) return "🦄";  // ユニコーン
+            if (level < 50) return "🐉";  // ドラゴン
+            return "🤴";                  // かんじマスター（神）
+        }
+
+        // 画面更新
+        function updateUI() {
+            const stats = getStats();
+            const mascot = getMascot(stats.level);
+            
+            // タイトル画面
+            document.getElementById('title-mascot').innerText = mascot;
+            document.getElementById('title-level').innerText = `Lv.${stats.level}`;
+
+            // リスト画面
+            document.getElementById('list-mascot').innerText = mascot;
+            document.getElementById('list-level').innerText = `Lv.${stats.level}`;
+            document.getElementById('next-xp').innerText = stats.nextLevelXP;
+            
+            // ゲージ更新
+            const percent = (stats.currentLevelXP / XP_PER_LEVEL) * 100;
+            document.getElementById('xp-bar').style.width = `${percent}%`;
+        }
+
+        // 学年切り替え
+        function setGrade(grade) {
+            playSound('click');
+            currentGrade = grade;
+            document.querySelectorAll('.grade-btn').forEach(btn => {
+                btn.classList.toggle('selected', parseInt(btn.innerText) === grade);
+            });
+        }
+
+        // 画面遷移
+        function showScreen(screenId) {
+            // スクロール位置をリセット（戻る挙動の改善）
+            window.scrollTo(0, 0);
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // 画面ごとの初期処理
+            if (screenId === 'list-screen') {
+                renderList();
+            } else if (screenId === 'title-screen') {
+                // タイトルに戻ったら検索窓をクリアしておく
+                document.getElementById('home-search-input').value = '';
+                document.getElementById('search-box').value = '';
+                updateUI();
+            }
+        }
+
+        // ホーム検索機能
+        function handleHomeSearch() {
+            const query = document.getElementById('home-search-input').value;
+            if (!query) return;
+
+            // 検索ワードをリスト画面の検索ボックスに渡す
+            document.getElementById('search-box').value = query;
+            
+            // 練習モード扱いでリストへ遷移
+            currentMode = 'practice';
+            playSound('click');
+            showScreen('list-screen');
+            
+            // リスト画面の検索処理を実行
+            filterList();
+        }
+
+        // モード選択
+        function selectMode(mode) {
+            playSound('click');
+            currentMode = mode;
+            // モード選択時は検索ボックスを空にする
+            document.getElementById('search-box').value = '';
+            showScreen('list-screen');
+        }
+
+        // 検索・リスト描画
+        function filterList() {
+            renderList();
+        }
+
         function renderList() {
             updateUI(); // ステータス更新
             const listData = allKanjiData[currentGrade];
             const searchText = document.getElementById('search-box').value.trim();
             const grid = document.getElementById('kanji-grid');
             const badge = document.getElementById('mode-display');
+            
+            // バッジ更新
+            if (currentMode === 'practice') {
+                badge.innerText = `${currentGrade}ねんせい・れんしゅう`;
+                badge.style.backgroundColor = "#4CAF50";
+            } else {
+                badge.innerText = `${currentGrade}ねんせい・テスト`;
+                badge.style.backgroundColor = "#EF5350";
+            }
+
+            // フィルタリング
+            let filtered = listData;
+            if (searchText) {
+                filtered = listData.filter(item => 
+                    item.char.includes(searchText) || (item.reading && item.reading.includes(searchText))
+                );
+            }
+
+            grid.innerHTML = '';
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#888;">みつかりません...<br>(いまの がくねん には ないかも？)</div>';
+                return;
+            }
+
+            const targetProgress = (currentMode === 'practice') ? progressPractice : progressTest;
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'kanji-card';
+                
+                // クリア済みチェック
+                const isCleared = targetProgress[item.char];
+                
+                // マーク表示（練習クリア:★、テストクリア:👑）
+                let badgeHtml = '';
+                if (progressPractice[item.char]) badgeHtml += `<div class="mark-badge cleared-practice" style="display:flex;right:auto;left:-5px;"><span class="star-mark">⭐</span></div>`;
+                if (progressTest[item.char]) badgeHtml += `<div class="mark-badge cleared-test" style="display:flex;"><span class="crown-mark">👑</span></div>`;
+                
+                // 現在のモードでクリア済みなら背景色を変える
+                if (isCleared) {
+                    card.classList.add(currentMode === 'practice' ? 'cleared-practice' : 'cleared-test');
+                }
+
+                card.innerHTML = `${item.char}${badgeHtml}`;
+                card.onclick = () => { playSound('click'); startApp(item); };
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 漢字書き取りアプリ本体 ---
+        function startApp(item) {
+            currentChar = item;
+            const screen = document.getElementById('practice-screen');
+            screen.classList.toggle('test-mode', currentMode === 'test');
+            showScreen('practice-screen');
+            
+            // 表示リセット
+            document.getElementById('result-overlay').classList.remove('active');
+            document.getElementById('levelup-overlay').classList.remove('active');
+            
+            const msgArea = document.getElementById('message-area');
+            const readingDisplay = document.getElementById('current-reading');
+            
+            if (currentMode === 'test') {
+                msgArea.innerText = "この かんじ を かこう！";
+                msgArea.style.color = "#D32F2F";
+                readingDisplay.innerText = item.reading ? item.reading.split('/')[0] : "（よみなし）";
+            } else {
+                msgArea.innerText = "うすいせんを なぞろう！";
+                msgArea.style.color = "#006064";
+                readingDisplay.innerText = `${item.char} (${item.reading || ''})`;
+            }
+
+            document.getElementById('character-target').innerHTML = '';
+
+            writer = HanziWriter.create('character-target', item.char, {
+                width: 300, height: 300, padding: 10,
+                showOutline: (currentMode === 'practice'), 
+                strokeAnimationSpeed: 1, 
+                delayBetweenStrokes: 200,
+                radicalColor: '#168F16', 
+                drawingWidth: 25, 
+                outlineColor: '#DDD',
+                strokeColor: '#333', 
+                highlightColor: '#FF7043', 
+                showHintAfterMisses: 1,
+                charDataLoader: (char, onComplete) => {
+                    fetch(`https://cdn.jsdelivr.net/gh/chanind/hanzi-writer-data-jp@master/data/${char}.json`)
+                    .then(r => r.json()).then(onComplete)
+                    .catch(() => {
+                        fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${char}.json`)
+                        .then(r => r.json()).then(onComplete);
+                    });
+                }
+            });
+            writer.quiz({
+                onMistake: () => { playSound('error'); document.getElementById('message-area').innerText = "おしい！ここだよ"; },
+                onCorrectStroke: () => { playSound('success'); document.getElementById('message-area').innerText = "いいぞ！"; },
+                onComplete: handleComplete
+            });
+        }
+
+        function handleComplete() {
+            playSound('complete');
+            const msg = document.getElementById('result-msg');
+            const icon = document.getElementById('result-icon');
+            const isPractice = (currentMode === 'practice');
+            const targetStorage = isPractice ? progressPractice : progressTest;
+            const storageKey = isPractice ? 'kanjiMasterPractice' : 'kanjiMasterTest';
+
+            // すでにクリア済みかどうか確認（経験値加算のため）
+            const isFirstClear = !targetStorage[currentChar.char];
+
+            // データ保存
+            targetStorage[currentChar.char] = true;
+            localStorage.setItem(storageKey, JSON.stringify(targetStorage));
+
+            // モーダル設定
+            if (isPractice) {
+                msg.innerText = "できたー！";
+                msg.style.color = "#4CAF50";
+                icon.innerText = "⭐";
+            } else {
+                msg.innerText = "だいせいかい！";
+                msg.style.color = "#F44336";
+                icon.innerText = "👑";
+            }
+
+            // 結果画面表示
+            setTimeout(() => {
+                document.getElementById('result-overlay').classList.add('active');
+                
+                // 初回クリアならレベルチェック
+                if (isFirstClear) {
+                    checkLevelUp();
+                }
+            }, 800);
+        }
+
+        function checkLevelUp() {
+            // 現在の経験値を取得（この時点でセーブ済み）
+            const stats = getStats();
+            
+            // レベルアップしたか判定（余りが0になった＝5の倍数に達した）
+            if (stats.totalXP > 0 && stats.totalXP % XP_PER_LEVEL === 0) {
+                setTimeout(() => {
+                    // レベルアップ演出
+                    playSound('levelup');
+                    document.getElementById('result-overlay').classList.remove('active'); // 結果画面消す
+                    document.getElementById('levelup-overlay').classList.add('active'); // レベルアップ画面出す
+                    document.getElementById('new-level-num').innerText = stats.level;
+                    document.getElementById('levelup-mascot').innerText = getMascot(stats.level);
+                }, 1000);
+            }
+        }
+
+        function closeLevelUp() {
+            document.getElementById('levelup-overlay').classList.remove('active');
+            goNext();
+        }
+
+        function goNext() {
+            const list = allKanjiData[currentGrade];
+            const idx = list.findIndex(k => k.char === currentChar.char);
+            if (idx >= 0 && idx < list.length - 1) {
+                startApp(list[idx + 1]);
+            } else {
+                showScreen('list-screen');
+            }
+        }
+        function retry() { startApp(currentChar); }
+
+        function resetData() {
+            if(confirm("ほんとうに データを けしますか？\nレベルも 1 に もどります。")) {
+                localStorage.removeItem('kanjiMasterPractice');
+                localStorage.removeItem('kanjiMasterTest');
+                progressPractice = {};
+                progressTest = {};
+                location.reload();
+            }
+        }
+
+        // 初期化
+        updateUI();
+    </script>
+ </body>
+</html>
+
             
             // バッジ更新
             if (currentMode === 'practice') {
