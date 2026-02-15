@@ -605,17 +605,58 @@
             return { level, totalXP, currentLevelXP, nextLevelXP };
         }
 
-        function getMascot(level) {
-            if (level < 5) return "🥚";
-            if (level < 10) return "🐣";
-            if (level < 15) return "🐥";
-            if (level < 20) return "🐓";
-            if (level < 25) return "🦉";
-            if (level < 30) return "🦅";
-            if (level < 35) return "🦁";
-            if (level < 40) return "🦄";
-            if (level < 50) return "🐉";
-            return "🤴";
+                function getMascot(level) {
+            const milestones = [
+                { limit: 5,   text: "🥚 漢字のタマゴ" },
+                { limit: 10,  text: "🐣 漢字のヒヨコ" },
+                { limit: 15,  text: "🐥 漢字のアヒル" },
+                { limit: 20,  text: "🐢 漢字のカメ" },
+                { limit: 25,  text: "🐇 漢字のウサギ" },
+                { limit: 30,  text: "🐈 漢字のコネコ" },
+                { limit: 35,  text: "🐕 漢字のコイヌ" },
+                { limit: 40,  text: "🐗 漢字のイノシシ" },
+                { limit: 45,  text: "🦌 漢字のシカ" },
+                { limit: 50,  text: "🐬 漢字のイルカ" },
+                { limit: 55,  text: "🐧 漢字のペンギン" },
+                { limit: 60,  text: "🦅 漢字のタカ" },
+                { limit: 65,  text: "🦉 漢字のフクロウ" },
+                { limit: 70,  text: "🐆 漢字のヒョウ" },
+                { limit: 75,  text: "🐅 漢字のトラ" },
+                { limit: 80,  text: "🦁 漢字のライオン" },
+                { limit: 85,  text: "🦈 漢字のサメ" },
+                { limit: 90,  text: "🐋 漢字のクジラ" },
+                { limit: 95,  text: "🦕 漢字のキョウリュウ" },
+                { limit: 100, text: "🐉 漢字のドラゴン" },
+                { limit: 105, text: "🥉 漢字の銅メダル" },
+                { limit: 110, text: "🥈 漢字の銀メダル" },
+                { limit: 115, text: "🥇 漢字の金メダル" },
+                { limit: 120, text: "🏆 漢字のトロフィー" },
+                { limit: 125, text: "🎪 漢字の団長" },
+                { limit: 130, text: "🎨 漢字の巨匠" },
+                { limit: 135, text: "⚓ 漢字の船長" },
+                { limit: 140, text: "⚔️ 漢字の隊長" },
+                { limit: 145, text: "🏯 漢字の城主" },
+                { limit: 150, text: "👺 漢字の天狗" },
+                { limit: 155, text: "🧙 漢字の魔法使い" },
+                { limit: 160, text: "🦸 漢字のヒーロー" },
+                { limit: 165, text: "👼 漢字の天使" },
+                { limit: 170, text: "🚂 漢字の機関車" },
+                { limit: 175, text: "🚄 漢字の新幹線" },
+                { limit: 180, text: "✈️ 漢字の飛行機" },
+                { limit: 185, text: "🚀 漢字のロケット" },
+                { limit: 190, text: "🛸 漢字のUFO" },
+                { limit: 195, text: "🌙 漢字の月" },
+                { limit: 200, text: "🌞 漢字の太陽" }
+            ];
+
+            for (let i = 0; i < milestones.length; i++) {
+                if (level < milestones[i].limit) {
+                    return milestones[i].text;
+                }
+            }
+            return "👑 漢字マスター・ゴッド";
+        }
+
         }
 
         function updateUI() {
