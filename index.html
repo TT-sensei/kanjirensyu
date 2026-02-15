@@ -596,7 +596,7 @@
         function getStats() {
             const practiceCount = Object.keys(progressPractice).length;
             const testCount = Object.keys(progressTest).length;
-            const totalXP = practiceCount + testCount;
+            const totalXP = practiceCount + (testCount*2);
             
             const level = Math.floor(totalXP / XP_PER_LEVEL) + 1;
             const currentLevelXP = totalXP % XP_PER_LEVEL;
