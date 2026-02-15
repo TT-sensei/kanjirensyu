@@ -459,18 +459,23 @@
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85);
     display: none;
-    
-    /* 変更点1: center から flex-start に変えると「上揃え」になります */
-    align-items: flex-start; 
-    
-    justify-content: center;
     z-index: 100;
     flex-direction: column;
     color: white;
     backdrop-filter: blur(3px);
+    box-sizing: border-box; /* はみ出し防止 */
 
-    /* 変更点2: 上に張り付きすぎないように余白を足します */
-    padding-top: 100px; 
+    /* ▼▼▼ ここが修正ポイントです ▼▼▼ */
+
+    /* 1. 左右を「中央」に戻します（これで左端に行かなくなります） */
+    align-items: center;
+
+    /* 2. 上下を「上詰め」にします */
+    justify-content: flex-start;
+
+    /* 3. 上からの余白（ここを数字で調整してください） */
+    padding-top: 100px;
+}
     
     /* ※Googleサイトの埋め込み枠からはみ出ないように設定 */
     box-sizing: border-box;
