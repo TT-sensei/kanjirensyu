@@ -168,36 +168,50 @@
         }
 
         /* 検索ボックス（ホーム用） */
-        .home-search-box button {
+       .home-search-box {
+    margin: 20px auto;
+    width: 85%;
+    max-width: 340px;
+    display: flex;
+    gap: 8px;
+    /* はみ出し防止の念押し */
+    box-sizing: border-box; 
+}
+
+/* 入力欄 */
+.home-search-box input {
+    flex: 1;
+    /* ▼▼▼ これがないとスマホではみ出します ▼▼▼ */
+    box-sizing: border-box; 
+    min-width: 0; /* これも重要！無理やり縮める設定 */
+    
+    padding: 12px;
+    border-radius: 25px;
+    border: 3px solid white;
+    font-size: 1rem;
+    text-align: center;
+    background: white;
+    box-shadow: var(--shadow-soft);
+    color: var(--text);
+    font-family: inherit;
+}
+
+/* ボタン */
+.home-search-box button {
+    /* ▼▼▼ ボタンにも同じおまじないを追加 ▼▼▼ */
+    box-sizing: border-box;
+    
     background: linear-gradient(135deg, var(--accent), #00E5FF);
     color: white;
-    border: none;
+    border: 3px solid transparent; /* 高さ合わせ用 */
     border-radius: 25px;
-    
-    /* ▼▼▼ ここを修正・追加 ▼▼▼ */
-    
-    /* 1. 上下の余白を入力欄(12px)に合わせて調整 */
-    padding: 12px 20px; 
-    
-    /* 2. ボタンが押しつぶされないように固定する魔法の呪文 */
-    flex-shrink: 0;
-    
-    /* 3. 中のアイコンや文字が折り返されないようにする */
-    white-space: nowrap;
-    
-    /* 4. アイコンをど真ん中に配置 */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* ▲▲▲ ここまで ▲▲▲ */
-
+    padding: 12px 20px;
     cursor: pointer;
     font-weight: 700;
     box-shadow: var(--shadow-pop);
     font-family: inherit;
-    /* 行の高さをリセットしてズレ防止 */
-    line-height: 1; 
+    flex-shrink: 0; /* ボタンは縮ませない */
+    line-height: normal;
 }
         .home-search-box input {
             flex: 1;
