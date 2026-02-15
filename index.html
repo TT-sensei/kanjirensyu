@@ -51,6 +51,8 @@
             background: linear-gradient(135deg, #FF9800, #FFCC80);
             color: white;
             padding-top: 60px;
+            /* スクロールできるように高さを制限しない */
+            padding-bottom: 50px; 
         }
 
         h1 {
@@ -144,6 +146,76 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+        /* --- 追加：クレジット・注意書き用のスタイル --- */
+        .footer-note, .app-credits-container {
+            margin-top: 40px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 0.9rem;
+            width: 90%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-sizing: border-box;
+        }
+        
+        .footer-note strong { color: #E65100; }
+
+        .credit-warning-box {
+            border: 2px solid #FF9800;
+            background: #FFF3E0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .credit-warning-title { font-weight: bold; margin-bottom: 5px; color: #E65100; }
+        
+        .credit-section-title {
+            font-size: 1.1rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .credit-list {
+            list-style: none;
+            padding: 0;
+        }
+        .credit-item { margin-bottom: 15px; }
+        .credit-name { font-weight: bold; color: #333; }
+        .credit-desc { font-size: 0.8rem; color: #555; line-height: 1.4; margin-left: 10px; }
+        .credit-link { color: #2196F3; }
+
+        .license-details {
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f1f1f1;
+        }
+        .license-summary {
+            padding: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: #555;
+            outline: none;
+        }
+        .license-full-text {
+            padding: 10px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            color: #333;
+            text-align: left;
+        }
+        /* ------------------------------------------- */
 
         /* リスト画面 */
         .header-bar {
@@ -352,9 +424,130 @@
         <button class="menu-btn btn-practice" onclick="selectMode('practice')">✏️ れんしゅう</button>
         <button class="menu-btn btn-test" onclick="selectMode('test')">📝 テスト</button>
         
-        <div style="margin-top:30px; font-size:0.8rem; color:rgba(255,255,255,0.7);">
-            <span onclick="resetData()">データリセット</span>
+        <div style="margin-top:20px; font-size:0.8rem; color:rgba(255,255,255,0.7);">
+            <span onclick="resetData()" style="text-decoration: underline; cursor:pointer;">データリセット</span>
         </div>
+
+        <div class="footer-note">
+            <strong>⚠️ 保護者・先生方へ</strong><br>
+            本アプリは、教員が学習支援のために自作したものです（外部の教材サイトCanvaへリンクします）。<br>
+            漢字のデータは日本の学習指導要領（全1026字）を参照しています。
+
+            <div style="margin-top: 10px; padding: 8px; background-color: #f9f9f9; border-left: 4px solid #ffcc00; font-size:0.85rem;">
+                <strong>【判定に関するご注意】</strong><br>
+                ・デジタルの標準字体を使用しているため、一部の漢字で教科書と異なる形（糸へんの下が「三本点」になる等）が表示・判定される場合があります。<br>
+                ・<strong>学校で習った書き方が最も正しい基準です。</strong>アプリの判定はあくまで目安としてご活用ください。
+            </div>
+        </div>
+
+        <div class="app-credits-container">
+            <div class="credit-warning-box">
+                <div class="credit-warning-title">
+                    <span class="credit-warning-icon">⚠️</span> 筆順（書き順）について
+                </div>
+                <div>
+                    本アプリでは日本の標準的な筆順を優先して表示していますが、一部の漢字でデータの都合上、中国語由来の筆順が表示される場合があります。<br>
+                    <strong>学校の教科書や先生の指導と異なる場合は、教科書を正解としてください。</strong>
+                </div>
+            </div>
+
+            <h3 class="credit-section-title">使用データ・ライセンス</h3>
+            <ul class="credit-list">
+                
+                <li class="credit-item">
+                    <div class="credit-name">1. 日本語漢字データ (hanzi-writer-data-jp)</div>
+                    <div class="credit-desc">
+                        • Source: <a href="https://github.com/chanind/hanzi-writer-data-jp" target="_blank" class="credit-link">GitHub Repository</a><br>
+                        • Derived from <strong>AnimCJK</strong> project (Copyright 2016-2019 François Mizessyn)<br>
+                        • Licensed under <strong>LGPL v3</strong> or later.<br>
+                        • Original Glyph Data: <strong>Arphic Public License</strong> (Copyright 1999 Arphic Technology Co., Ltd.)
+                        
+                        <details class="license-details">
+                        <summary class="license-summary">▶ Arphic Public License 全文を表示</summary>
+                        <div class="license-full-text">ARPHIC PUBLIC LICENSE
+
+Copyright (C) 1999 Arphic Technology Co., Ltd.
+11Fl. No.168, Yung Chi Rd., Taipei, 110 Taiwan
+All rights reserved except as specified below.
+
+Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is forbidden.
+
+Preamble
+
+   The licenses for most software are designed to take away your freedom to share and change it. By contrast, the ARPHIC PUBLIC LICENSE specifically permits and encourages you to use this software, provided that you give the recipients all the rights that we gave you and make sure they can get the modifications of this software.
+
+Legal Terms
+
+0. Definitions:
+   Throughout this License, "Font" means the TrueType fonts "AR PL Mingti2L Big5", "AR PL KaitiM Big5" (BIG-5 character set) and "AR PL SungtiL GB", "AR PL KaitiM GB" (GB character set) which are originally distributed by Arphic, and the derivatives of those fonts created through any modification including modifying glyph, reordering glyph, converting format, changing font name, or adding/deleting some characters in/from glyph table.
+
+   "PL" means "Public License".
+
+   "Copyright Holder" means whoever is named in the copyright or copyrights for the Font.
+
+   "You" means the licensee, or person copying, redistributing or modifying the Font.
+
+   "Freely Available" means that you have the freedom to copy or modify the Font as well as redistribute copies of the Font under the same conditions you received, not price. If you wish, you can charge for this service.
+
+1. Copying & Distribution
+   You may copy and distribute verbatim copies of this Font in any medium, without restriction, provided that you retain this license file (ARPHICPL.TXT) unaltered in all copies.
+
+2. Modification
+   You may otherwise modify your copy of this Font in any way, including modifying glyph, reordering glyph, converting format, changing font name, or adding/deleting some characters in/from glyph table, and copy and distribute such modifications under the terms of Section 1 above, provided that the following conditions are met:
+
+   a) You must insert a prominent notice in each modified file stating how and when you changed that file.
+
+   b) You must make such modifications Freely Available as a whole to all third parties under the terms of this License, such as by offering access to copy the modifications from a designated place, or distributing the modifications on a medium customarily used for software interchange.
+
+   c) If the modified fonts normally reads commands interactively when run, you must cause it, when started running for such interactive use in the most ordinary way, to print or display an announcement including an appropriate copyright notice and a notice that there is no warranty (or else, saying that you provide a warranty) and that users may redistribute the Font under these conditions, and telling the user how to view a copy of this License.
+
+   These requirements apply to the modified work as a whole. If identifiable sections of that work are not derived from the Font, and can be reasonably considered independent and separate works in themselves, then this License and its terms, do not apply to those sections when you distribute them as separate works. Therefore, mere aggregation of another work not based on the Font with the Font on a volume of a storage or distribution medium does not bring the other work under the scope of this License.
+
+3. Condition Subsequent
+   You may not copy, modify, sublicense, or distribute the Font except as expressly provided under this License. Any attempt otherwise to copy, modify, sublicense or distribute the Font will automatically retroactively void your rights under this License. However, parties who have received copies or rights from you under this License will keep their licenses valid so long as such parties remain in full compliance.
+
+4. Acceptance
+   You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to copy, modify, sublicense or distribute the Font. These actions are prohibited by law if you do not accept this License. Therefore, by copying, modifying, sublicensing or distributing the Font, you indicate your acceptance of this License and all its terms and conditions.
+
+5. Automatic Receipt
+   Each time you redistribute the Font, the recipient automatically receives a license from the original licensor to copy, distribute or modify the Font subject to these terms and conditions. You may not impose any further restrictions on the recipients' exercise of the rights granted herein. You are not responsible for enforcing compliance by third parties to this License. 
+
+6. Contradiction
+   If, as a consequence of a court judgment or allegation of patent infringement or for any other reason (not limited to patent issues), conditions are imposed on you (whether by court order, agreement or otherwise) that contradict the conditions of this License, they do not excuse you from the conditions of this License. If you cannot distribute so as to satisfy simultaneously your obligations under this License and any other pertinent obligations, then as a consequence you may not distribute the Font at all. For example, if a patent license would not permit royalty-free redistribution of the Font by all those who receive copies directly or indirectly through you, then the only way you could satisfy both it and this License would be to refrain entirely from distribution of the Font.
+
+   If any portion of this section is held invalid or unenforceable under any particular circumstance, the balance of the section is intended to apply and the section as a whole is intended to apply in other circumstances. 
+
+7. NO WARRANTY
+   BECAUSE THE FONT IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE FONT, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS OR OTHER PARTIES PROVIDE THE FONT "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE FONT IS WITH YOU. SHOULD THE FONT PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+8. DAMAGES WAIVER
+   UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING, IN NO EVENT WILL ANY COPYRIGHTT HOLDERS, OR OTHER PARTIES WHO MAY COPY, MODIFY OR REDISTRIBUTE THE FONT AS PERMITTED ABOVE, BE LIABLE TO YOU FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, INCIDENTAL, SPECIAL OR EXEMPLARY DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE FONT (INCLUDING BUT NOT LIMITED TO PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR PROFITS; OR BUSINESS INTERRUPTION), EVEN IF SUCH HOLDERS OR OTHER PARTIES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</div>
+                        </details>
+                    </div>
+                </li>
+
+                <li class="credit-item">
+                    <div class="credit-name">2. 予備漢字データ (hanzi-writer-data)</div>
+                    <div class="credit-desc">
+                        • Source: <a href="https://github.com/chanind/hanzi-writer-data" target="_blank" class="credit-link">GitHub Repository</a><br>
+                        • Licensed under <strong>GPL v3</strong><br>
+                        • Base Data: MakeMeHanzi / KanjiVG
+                    </div>
+                </li>
+
+                <li class="credit-item">
+                    <div class="credit-name">3. 表示ライブラリ</div>
+                    <div class="credit-desc">
+                        • <strong>Hanzi Writer</strong>: <a href="https://chanind.github.io/hanzi-writer/" target="_blank" class="credit-link">Official Site</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <p style="font-size: 0.8em; color: #777; margin-top: 20px; text-align: center;">
+                本アプリのデータは無保証であり、利用により生じたいかなる結果についても開発者は責任を負いません。
+            </p>
+        </div>
+        <br><br>
     </div>
 
     <div id="list-screen" class="screen">
