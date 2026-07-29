@@ -16,6 +16,8 @@ function getLapTheme(lap) { return LAP_THEMES[Math.min(lap, LAP_THEMES.length - 
 // 状態管理
 // ============================================================
 let progressPractice = JSON.parse(localStorage.getItem('kanjiMasterPractice')) || {};
+let kanjiExampleDataByGrade = {};
+let currentSentenceExampleIndex = 0;
 let progressTest     = JSON.parse(localStorage.getItem('kanjiMasterTest'))     || {};
 let tokkunKanji      = JSON.parse(localStorage.getItem('kanjiMasterTokkun'))   || {};
 let nigateKanji      = JSON.parse(localStorage.getItem('kanjiMasterNigate'))   || {};
@@ -394,6 +396,51 @@ function bulkRegister(type) {
     setTimeout(() => msg.remove(), 1800);
 }
 
+
+// ============================================================
+// 文章例文データ
+// ============================================================
+async function loadKanjiExampleData() {
+    for (let g = 1; g <= 6; g++) {
+        try {
+            const res = await fetch(`kanjiExampleData_${g}.js`);
+            if (!res.ok) continue;
+            const text = await res.text();
+            const normalized = text.replace(/const\s+kanjiExampleData\s*=/, 'return ');
+            kanjiExampleDataByGrade[g] = new Function(normalized)();
+        } catch (e) {
+            console.warn(`${g}年の文章データを読み込めませんでした`, e);
+        }
+    }
+}
+
+function isSentenceMode() {
+    return currentMode === 'sentencePractice' || currentMode === 'sentenceTest';
+}
+
+function getSentenceExamples(char, grade) {
+    return (kanjiExampleDataByGrade[grade] && kanjiExampleDataByGrade[grade][char]) || [];
+}
+
+function formatSentenceExample(char, example, mode) {
+    const index = example.sentence.indexOf(char);
+    if (index === -1) return example.sentence;
+    const before = example.sentence.slice(0, index);
+    const after = example.sentence.slice(index + char.length);
+    const target = mode === 'sentenceTest' ? '□' : char;
+    return `${before}${target}（${example.reading}）${after}`;
+}
+
+function renderSentenceExamples() {
+    const examples = getSentenceExamples(currentChar.char, currentChar._foundGrade || currentGrade);
+    const mode = currentMode;
+    if (!examples.length) return '';
+    return `<div class="sentence-panel">
+        <div class="sentence-mode-title">${mode === 'sentenceTest' ? '文章でテスト' : '文章でれんしゅう'}</div>
+        ${examples.map((example, i) => `<div class="sentence-example${i === currentSentenceExampleIndex ? ' active' : ''}">${formatSentenceExample(currentChar.char, example, mode)}</div>`).join('')}
+    </div>`;
+}
+
 // ============================================================
 // リスト描画
 // ============================================================
@@ -434,6 +481,12 @@ function renderList() {
     } else if (currentMode==='test') {
         badge.innerText=searchText?`🌍 ぜんがくねん・テスト`:`${currentGrade}ねんせい・🏅 テスト`;
         badge.style.background=`linear-gradient(135deg,${theme.primary},${theme.secondary})`;
+    } else if (currentMode==='sentencePractice') {
+        badge.innerText=searchText?`🌍 ぜんがくねん・文章でれんしゅう`:`${currentGrade}ねんせい・📘 文章でれんしゅう`;
+        badge.style.background='linear-gradient(135deg,#00BFFF,#00E5FF)';
+    } else if (currentMode==='sentenceTest') {
+        badge.innerText=searchText?`🌍 ぜんがくねん・文章でテスト`:`${currentGrade}ねんせい・📝 文章でテスト`;
+        badge.style.background='linear-gradient(135deg,#FF6B35,#FFB74D)';
     } else if (currentMode==='tokkun') {
         badge.innerText=`💪 とっくん漢字（${Object.keys(tokkunKanji).length}コ）`;
         badge.style.background='linear-gradient(135deg,#4CAF50,#81C784)';
@@ -469,6 +522,10 @@ function renderList() {
             filtered = allKanjiData[currentGrade];
             filtered.forEach(m => m._foundGrade=currentGrade);
         }
+    }
+
+    if (isSentenceMode()) {
+        filtered = filtered.filter(i => getSentenceExamples(i.char, i._foundGrade || currentGrade).length > 0);
     }
 
     grid.innerHTML = '';
@@ -836,9 +893,11 @@ async function playAnimation() {
 // ============================================================
 // アプリ制御
 // ============================================================
-async function startApp(item) {
+async function startApp(item, options = {}) {
     if (hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}
-    isAnimating=false; currentChar=item; window.scrollTo(0,0);
+    isAnimating=false; currentChar=item;
+    if (!options.keepSentenceIndex) currentSentenceExampleIndex=0;
+    window.scrollTo(0,0);
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('practice-screen').classList.add('active');
     updateFolderBtns();
@@ -846,6 +905,8 @@ async function startApp(item) {
     const rd=document.getElementById('current-reading'); if(rd)rd.style.display='none';
     if (isRandomTest){msg.innerText=`🎲 テスト: ${randomIndex+1}/${randomQueue.length}問目`;msg.style.color="#9B59B6";}
     else if (currentMode==='test'){msg.innerText="この かんじ を かこう！";msg.style.color="#FF1493";}
+    else if (currentMode==='sentencePractice'){msg.innerText="文の かんじを かこう！";msg.style.color="#00BFFF";}
+    else if (currentMode==='sentenceTest'){msg.innerText="□に 入る かんじを かこう！";msg.style.color="#FF6B35";}
     else{msg.innerText="うすいせんを なぞろう！";msg.style.color="#00D084";}
 
     let onyomi=[],kunyomi=[];
@@ -867,6 +928,7 @@ async function startApp(item) {
         .ym{display:none;}
         @media(max-width:500px){.kl{flex-direction:column;align-items:center;gap:15px;}.sc{display:none;}.ym{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;font-size:1.2rem;font-weight:bold;}}
         </style>
+        ${renderSentenceExamples()}
         <div class="kl">
             <div class="sc">${kunyomi.length>0?`<div class="yb kun">くんよみ</div><div class="ypc" style="color:#2874A6;">${dKP}</div>`:''}</div>
             <div class="ym">${kunyomi.length>0?`<div style="color:#2874A6;">${dKM}</div>`:''}${onyomi.length>0?`<div style="color:#B03A2E;">${dOM}</div>`:''}</div>
@@ -886,7 +948,7 @@ async function startApp(item) {
     bgCanvasCtx.stroke(); bgCanvasCtx.restore();
     try {
         currentKanjiPaths=await fetchKanjiVG(item.char);
-        if (currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate'){
+        if (currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate'||currentMode==='sentencePractice'){
             bgCanvasCtx.save();
             bgCanvasCtx.translate(PADDING,PADDING); bgCanvasCtx.scale(SCALE,SCALE);
             currentKanjiPaths.forEach(pd=>bgCanvasCtx.stroke(new Path2D(pd)));
@@ -899,9 +961,18 @@ async function startApp(item) {
 // 完了処理
 // ============================================================
 function handleComplete() {
+    if (isSentenceMode()) {
+        const examples = getSentenceExamples(currentChar.char, currentChar._foundGrade || currentGrade);
+        if (currentSentenceExampleIndex < examples.length - 1) {
+            playSound('complete');
+            currentSentenceExampleIndex++;
+            retry({ keepSentenceIndex: true });
+            return;
+        }
+    }
     playSound('complete');
     const msg=document.getElementById('result-msg'),icon=document.getElementById('result-icon');
-    const isPractice=(currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate');
+    const isPractice=(currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate'||currentMode==='sentencePractice');
     const store=isPractice?progressPractice:progressTest;
     const sKey=isPractice?'kanjiMasterPractice':'kanjiMasterTest';
 
@@ -1016,7 +1087,11 @@ function handleRandomClearClick() {
 // ============================================================
 // リセット
 // ============================================================
-function retry(){if(hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}isAnimating=false;startApp(currentChar);}
+function retry(options = {}){
+    if(hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}
+    isAnimating=false;
+    startApp(currentChar, { keepSentenceIndex: !!options.keepSentenceIndex });
+}
 function showResetConfirm()  {playSound('click');document.getElementById('reset-confirm').classList.add('active');}
 function closeResetConfirm() {playSound('click');document.getElementById('reset-confirm').classList.remove('active');}
 function executeReset() {
@@ -1030,4 +1105,4 @@ function executeReset() {
 // ============================================================
 // 初期化
 // ============================================================
-updateUI();
+loadKanjiExampleData().then(() => { updateUI(); updateTitleGradeButtons(); });
