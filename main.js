@@ -24,6 +24,9 @@ let nigateKanji      = JSON.parse(localStorage.getItem('kanjiMasterNigate'))   |
 let bonusXP          = parseInt(localStorage.getItem('kanjiMasterBonusXP'))    || 0;
 let lapCount         = JSON.parse(localStorage.getItem('kanjiMasterLap'))      || {};
 let mistakeCount     = JSON.parse(localStorage.getItem('kanjiMasterMistakes')) || {};
+let learningStats    = JSON.parse(localStorage.getItem('kanjiMasterLearningStats')) || {};
+let sharedKanjiScope = [];
+let shareSelection   = new Set();
 
 let currentChar   = null;
 let currentMode   = 'practice';
@@ -202,6 +205,26 @@ function updateUI() {
     const xpBar = document.getElementById('xp-bar');
     if (xpBar) xpBar.style.width = `${(s.currentLevelXP/XP_PER_LEVEL)*100}%`;
     updateGradeProgressBars();
+}
+
+function getAllowedList(list) {
+    return sharedKanjiScope.length ? list.filter(item => sharedKanjiScope.includes(item.char)) : list;
+}
+
+function saveLearningStats() {
+    localStorage.setItem('kanjiMasterLearningStats', JSON.stringify(learningStats));
+}
+
+function noteAttempt(char) {
+    const stat = learningStats[char] || { attempts:0, correct:0, mistakes:0, lastStudied:null };
+    stat.attempts++; stat.lastStudied = new Date().toISOString();
+    learningStats[char] = stat; saveLearningStats();
+}
+
+function noteCorrect(char) {
+    const stat = learningStats[char] || { attempts:1, correct:0, mistakes:0, lastStudied:null };
+    stat.correct++; stat.lastStudied = new Date().toISOString();
+    learningStats[char] = stat; saveLearningStats();
 }
 
 function updateGradeProgressBars() {
@@ -535,11 +558,12 @@ function renderList() {
         }
     } else {
         if (allKanjiData[currentGrade]) {
-            filtered = allKanjiData[currentGrade];
+            filtered = getAllowedList(allKanjiData[currentGrade]);
             filtered.forEach(m => m._foundGrade=currentGrade);
         }
     }
 
+    if (sharedKanjiScope.length) filtered = filtered.filter(item => sharedKanjiScope.includes(item.char));
     grid.innerHTML = '';
     if (!filtered.length) { grid.innerHTML='<div style="grid-column:1/-1;padding:20px;">みつかりません...</div>'; return; }
 
@@ -647,7 +671,7 @@ function renderListProgressBar() {
 // ============================================================
 function startRandomTest() {
     playSound('click');
-    const list = allKanjiData[currentGrade]; if (!list||!list.length) return;
+    const list = getAllowedList(allKanjiData[currentGrade] || []); if (!list.length) return;
     randomQueue = [...list].sort(()=>0.5-Math.random()).slice(0,10);
     randomIndex = 0; isRandomTest=true; currentMode='test';
     levelBeforeRandomTest = getStats().level; startApp(randomQueue[0]);
@@ -856,6 +880,9 @@ function evaluateStroke() {
         const char = currentChar.char;
         mistakeCount[char] = (mistakeCount[char]||0) + 1;
         localStorage.setItem('kanjiMasterMistakes', JSON.stringify(mistakeCount));
+        const stat = learningStats[char] || { attempts:1, correct:0, mistakes:0, lastStudied:null };
+        stat.mistakes++; stat.lastStudied = new Date().toISOString();
+        learningStats[char] = stat; saveLearningStats();
         if (mistakeCount[char] >= 3 && !nigateKanji[char]) {
             nigateKanji[char] = true;
             localStorage.setItem('kanjiMasterNigate', JSON.stringify(nigateKanji));
@@ -908,6 +935,7 @@ async function playAnimation() {
 async function startApp(item, options = {}) {
     if (hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}
     isAnimating=false; currentChar=item;
+    noteAttempt(item.char);
     if (currentMode==='test' && !options.keepTestExample) {
         const examples = getSentenceExamples(item.char, item._foundGrade || currentGrade);
         currentTestExample = examples.length ? examples[Math.floor(Math.random()*examples.length)] : null;
@@ -987,6 +1015,7 @@ function handleComplete() {
     const oldLv=getStats().level;
 
     store[currentChar.char]=true;
+    noteCorrect(currentChar.char);
     localStorage.setItem(sKey,JSON.stringify(store));
 
     const grade=currentChar._foundGrade||currentGrade;
@@ -1027,7 +1056,7 @@ function moveToNextKanji() {
         if (currentMode==='tokkun'||currentMode==='nigate'){
             const f=currentMode==='tokkun'?tokkunKanji:nigateKanji;
             for (let g=1;g<=6;g++) if(allKanjiData[g]) list=list.concat(allKanjiData[g].filter(i=>f[i.char]));
-        } else { list=allKanjiData[currentChar._foundGrade||currentGrade]||[]; }
+        } else { list=getAllowedList(allKanjiData[currentChar._foundGrade||currentGrade]||[]); }
         if (!list.length){showScreen('list-screen');return;}
         const idx=list.findIndex(k=>k.char===currentChar.char);
         if (idx>=0&&idx<list.length-1) startApp(list[idx+1]); else showScreen('list-screen');
@@ -1105,12 +1134,113 @@ function closeResetConfirm() {playSound('click');document.getElementById('reset-
 function executeReset() {
     playSound('click');
     localStorage.clear();
-    progressPractice={}; progressTest={}; tokkunKanji={}; nigateKanji={}; bonusXP=0; lapCount={}; mistakeCount={};
+    progressPractice={}; progressTest={}; tokkunKanji={}; nigateKanji={}; bonusXP=0; lapCount={}; mistakeCount={}; learningStats={};
     document.getElementById('reset-confirm').classList.remove('active');
     location.reload();
 }
 
 // ============================================================
+// GitHub Pagesだけで使える共有範囲・復習・学習カルテ
+// ============================================================
+function openFeatureModal(title, html) {
+    document.getElementById('feature-modal-title').innerText = title;
+    document.getElementById('feature-modal-body').innerHTML = html;
+    document.getElementById('feature-modal').classList.add('active');
+}
+function closeFeatureModal() { document.getElementById('feature-modal').classList.remove('active'); }
+
+function seededShuffle(list, seedText) {
+    let seed = Array.from(seedText).reduce((n,c) => ((n * 31) + c.charCodeAt(0)) >>> 0, 2166136261);
+    const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    const result = [...list];
+    for (let i=result.length-1; i>0; i--) { const j=Math.floor(random()*(i+1)); [result[i],result[j]]=[result[j],result[i]]; }
+    return result;
+}
+
+function startDailyChallenge() {
+    const today = new Date();
+    const dateKey = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    const list = getAllowedList(allKanjiData[currentGrade] || []);
+    if (!list.length) return;
+    randomQueue = seededShuffle(list, `${dateKey}-${currentGrade}`).slice(0,10);
+    randomIndex=0; isRandomTest=true; currentMode='test'; levelBeforeRandomTest=getStats().level;
+    startApp(randomQueue[0]);
+}
+
+function showLearningReport() {
+    const stats = Object.values(learningStats);
+    const attempts = stats.reduce((n,s)=>n+(s.attempts||0),0);
+    const correct = stats.reduce((n,s)=>n+(s.correct||0),0);
+    const mistakes = stats.reduce((n,s)=>n+(s.mistakes||0),0);
+    const rate = attempts ? Math.min(100,Math.round(correct/attempts*100)) : 0;
+    const weak = Object.entries(learningStats).sort((a,b)=>(b[1].mistakes||0)-(a[1].mistakes||0)).filter(([,s])=>s.mistakes).slice(0,12);
+    openFeatureModal('📊 がくしゅうカルテ', `
+      <div class="report-grid">
+       <div class="report-card"><strong>${attempts}</strong>ちょうせん</div>
+       <div class="report-card"><strong>${rate}%</strong>せいとうりつ</div>
+       <div class="report-card"><strong>${mistakes}</strong>まちがい</div>
+      </div>
+      <h3>にがてランキング</h3>
+      <p>${weak.length ? weak.map(([c,s])=>`<b>${c}</b>（${s.mistakes}かい）`).join('　') : 'まだ きろくが ありません。'}</p>`);
+}
+
+function openReviewPanel() {
+    openFeatureModal('🔁 ふくしゅうモード', `<div class="review-options">
+      <label><input type="radio" name="review-kind" value="weak" checked> 💦 にがてな漢字</label>
+      <label><input type="radio" name="review-kind" value="mistakes"> ✍️ まちがいが多い漢字</label>
+      <label><input type="radio" name="review-kind" value="unlearned"> 🌱 まだ合格していない漢字</label>
+      <label><input type="radio" name="review-kind" value="grade"> 📚 ${currentGrade}年生をまとめて</label>
+      </div><div class="feature-actions"><button class="feature-action" onclick="startReview()">10もん はじめる</button></div>`);
+}
+
+function startReview() {
+    const kind = document.querySelector('input[name="review-kind"]:checked').value;
+    let list = allKanjiData[currentGrade] || [];
+    if (kind==='weak') list = list.filter(i=>nigateKanji[i.char]);
+    if (kind==='mistakes') list = [...list].filter(i=>mistakeCount[i.char]).sort((a,b)=>(mistakeCount[b.char]||0)-(mistakeCount[a.char]||0));
+    if (kind==='unlearned') list = list.filter(i=>!progressTest[i.char]);
+    list = getAllowedList(list);
+    if (!list.length) { alert('この じょうけんの かんじは まだ ないよ！'); return; }
+    randomQueue = kind==='mistakes' ? list.slice(0,10) : [...list].sort(()=>Math.random()-.5).slice(0,10);
+    randomIndex=0; isRandomTest=true; currentMode='test'; levelBeforeRandomTest=getStats().level;
+    closeFeatureModal(); startApp(randomQueue[0]);
+}
+
+function openSharePicker() {
+    shareSelection = new Set(sharedKanjiScope);
+    const list = allKanjiData[currentGrade] || [];
+    openFeatureModal('🔗 出題する漢字をえらぶ', `<p>${currentGrade}年生から選び、できたURLを先生から共有できます。</p>
+      <div class="share-kanji-grid">${list.map(i=>`<button class="share-kanji${shareSelection.has(i.char)?' selected':''}" data-char="${i.char}" onclick="toggleShareKanji(this)">${i.char}</button>`).join('')}</div>
+      <div class="feature-actions"><button class="feature-action" onclick="selectAllShareKanji()">ぜんぶ選ぶ</button><button class="feature-action" onclick="copyShareUrl()">URLをコピー</button></div>`);
+}
+function toggleShareKanji(button) {
+    const char=button.dataset.char;
+    if (shareSelection.has(char)) shareSelection.delete(char); else shareSelection.add(char);
+    button.classList.toggle('selected',shareSelection.has(char));
+}
+function selectAllShareKanji() {
+    document.querySelectorAll('.share-kanji').forEach(button=>{shareSelection.add(button.dataset.char);button.classList.add('selected');});
+}
+async function copyShareUrl() {
+    if (!shareSelection.size) { alert('漢字を 1つ以上 えらんでね！'); return; }
+    const url = new URL(location.href); url.search=''; url.searchParams.set('grade',currentGrade); url.searchParams.set('kanji',[...shareSelection].join(''));
+    try { await navigator.clipboard.writeText(url.href); alert('共有URLを コピーしました！'); }
+    catch (_) { prompt('このURLをコピーしてください',url.href); }
+}
+
+function applySharedScopeFromUrl() {
+    const params = new URLSearchParams(location.search);
+    const chars = Array.from(params.get('kanji') || '');
+    if (!chars.length) return;
+    const known = new Set(Object.values(allKanjiData).flat().map(i=>i.char));
+    sharedKanjiScope = [...new Set(chars.filter(c=>known.has(c)))];
+    const grade = Number(params.get('grade'));
+    if (grade>=1 && grade<=6) currentGrade=grade;
+    const note=document.getElementById('shared-scope-note'); note.hidden=false;
+    note.innerText=`🔗 先生がえらんだ ${sharedKanjiScope.length}この漢字だけで学習します`;
+}
+
+// ============================================================
 // 初期化
 // ============================================================
-loadKanjiExampleData().then(() => { updateUI(); updateTitleGradeButtons(); });
+loadKanjiExampleData().then(() => { applySharedScopeFromUrl(); updateUI(); updateTitleGradeButtons(); });
