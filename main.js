@@ -453,6 +453,16 @@ function renderTestExample() {
     </div>`;
 }
 
+// 例文があるテストでは、答えにつながる読みを最初は伏せておく。
+function revealTestReadings(button) {
+    const readings = document.getElementById('test-reading-panel');
+    if (!readings) return;
+    readings.classList.remove('test-readings-hidden');
+    button.setAttribute('aria-expanded', 'true');
+    button.hidden = true;
+    playSound('click');
+}
+
 // ============================================================
 // リスト描画
 // ============================================================
@@ -931,10 +941,12 @@ async function startApp(item, options = {}) {
         .yb.on{border:2px solid #FADBD8;color:#B03A2E;background:#FDEDEC;}
         .ypc{writing-mode:vertical-rl;text-orientation:upright;font-size:1.5rem;font-weight:bold;letter-spacing:0.2rem;line-height:2.2;text-align:start;}
         .ym{display:none;}
+        .test-readings-hidden .sc,.test-readings-hidden .ym{display:none;}
         @media(max-width:500px){.kl{flex-direction:column;align-items:center;gap:15px;}.sc{display:none;}.ym{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;font-size:1.2rem;font-weight:bold;}}
         </style>
         ${currentMode==='test' ? renderTestExample() : renderSentenceExamples()}
-        <div class="kl">
+        ${currentMode==='test' && currentTestExample ? `<button type="button" class="reading-hint-btn" aria-controls="test-reading-panel" aria-expanded="false" onclick="revealTestReadings(this)">💡 ヒント</button>` : ''}
+        <div class="kl${currentMode==='test' && currentTestExample ? ' test-readings-hidden' : ''}" id="test-reading-panel">
             <div class="sc">${kunyomi.length>0?`<div class="yb kun">くんよみ</div><div class="ypc" style="color:#2874A6;">${dKP}</div>`:''}</div>
             <div class="ym">${kunyomi.length>0?`<div style="color:#2874A6;">${dKM}</div>`:''}${onyomi.length>0?`<div style="color:#B03A2E;">${dOM}</div>`:''}</div>
             <div style="position:relative;width:${CANVAS_SIZE}px;height:${CANVAS_SIZE}px;margin:0;background:white;flex-shrink:0;border-radius:24px;box-shadow:0 4px 12px rgba(0,0,0,0.05);">

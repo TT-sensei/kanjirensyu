@@ -1,14 +1,14 @@
 const kanjiExampleData_3 = {
     "悪": [
-        { sentence: "わるい ことを しません。", reading: "わる" },
+        { sentence: "悪い ことを しません。", reading: "わる" },
         { sentence: "悪てんこうです。", reading: "あく" }
     ],
     "安": [
-        { sentence: "やすい ねだんです。", reading: "やす" },
+        { sentence: "安い ねだんです。", reading: "やす" },
         { sentence: "安しんします。", reading: "あん" }
     ],
     "暗": [
-        { sentence: "くらい へやです。", reading: "くら" },
+        { sentence: "暗い へやです。", reading: "くら" },
         { sentence: "暗きします。", reading: "あん" }
     ],
     "医": [
@@ -52,8 +52,8 @@ const kanjiExampleData_3 = {
         { sentence: "駅いんさんに ききます。", reading: "えき" }
     ],
     "央": [
-        { sentence: "中おうに たちます。", reading: "おう" },
-        { sentence: "中おうこうえんに いきます。", reading: "おう" }
+        { sentence: "中央に たちます。", reading: "おう" },
+        { sentence: "中央こうえんに いきます。", reading: "おう" }
     ],
     "横": [
         { sentence: "横に ならびます。", reading: "よこ" },
@@ -168,15 +168,15 @@ const kanjiExampleData_3 = {
         { sentence: "こう区の ちずを みます。", reading: "く" }
     ],
     "苦": [
-        { sentence: "にがい くすりです。", reading: "にが" },
-        { sentence: "くるしい きもちです。", reading: "くる" }
+        { sentence: "苦い くすりです。", reading: "にが" },
+        { sentence: "苦しい きもちです。", reading: "くる" }
     ],
     "具": [
         { sentence: "どう具を つかいます。", reading: "ぐ" },
         { sentence: "具たいてきに はなします。", reading: "ぐ" }
     ],
     "君": [
-        { sentence: "きみと あそびます。", reading: "きみ" },
+        { sentence: "君と あそびます。", reading: "きみ" },
         { sentence: "たなか君と はなします。", reading: "くん" }
     ],
     "係": [
@@ -216,7 +216,7 @@ const kanjiExampleData_3 = {
         { sentence: "ほう向を しらべます。", reading: "こう" }
     ],
     "幸": [
-        { sentence: "しあわせな きもちです。", reading: "しあわ" },
+        { sentence: "幸せな きもちです。", reading: "しあわ" },
         { sentence: "幸うんを ねがいます。", reading: "こう" }
     ],
     "港": [
@@ -417,10 +417,10 @@ const kanjiExampleData_3 = {
     ],
     "整": [
         { sentence: "つくえを 整えます。", reading: "ととの" },
-        { sentence: "整れつに ならびます。", reading: "せい" }
+        { sentence: "整列に ならびます。", reading: "せい" }
     ],
     "昔": [
-        { sentence: "むかしばなしを ききます。", reading: "むかし" },
+        { sentence: "昔ばなしを ききます。", reading: "むかし" },
         { sentence: "こん昔ものがたりです。", reading: "せき" }
     ],
     "全": [
@@ -440,7 +440,7 @@ const kanjiExampleData_3 = {
         { sentence: "かん想を はなします。", reading: "そう" }
     ],
     "息": [
-        { sentence: "いきを すいます。", reading: "いき" },
+        { sentence: "息を すいます。", reading: "いき" },
         { sentence: "きゅう息を とります。", reading: "そく" }
     ],
     "速": [
@@ -457,7 +457,7 @@ const kanjiExampleData_3 = {
     ],
     "打": [
         { sentence: "ボールを 打ちます。", reading: "う" },
-        { sentence: "だ球を うけとめます。", reading: "だ" }
+        { sentence: "打球を うけとめます。", reading: "だ" }
     ],
     "対": [
         { sentence: "対りつします。", reading: "たい" },
@@ -536,12 +536,12 @@ const kanjiExampleData_3 = {
         { sentence: "ちか鉄に のります。", reading: "てつ" }
     ],
     "転": [
-        { sentence: "ころんで しまいました。", reading: "ころ" },
+        { sentence: "転んで しまいました。", reading: "ころ" },
         { sentence: "自転しゃに のります。", reading: "てん" }
     ],
     "都": [
         { sentence: "とうきょう都に すんで います。", reading: "と" },
-        { sentence: "みやこの まちなみです。", reading: "みやこ" }
+        { sentence: "都の まちなみです。", reading: "みやこ" }
     ],
     "度": [
         { sentence: "おん度を はかります。", reading: "ど" },
@@ -568,7 +568,7 @@ const kanjiExampleData_3 = {
         { sentence: "登こうします。", reading: "とう" }
     ],
     "等": [
-        { sentence: "ひとしい おおきさです。", reading: "ひと" },
+        { sentence: "等しい おおきさです。", reading: "ひと" },
         { sentence: "一等しょうを とりました。", reading: "とう" }
     ],
     "動": [
@@ -653,15 +653,15 @@ const kanjiExampleData_3 = {
     ],
     "病": [
         { sentence: "病きに なりました。", reading: "びょう" },
-        { sentence: "やまいが なおりました。", reading: "やまい" }
+        { sentence: "病が なおりました。", reading: "やまい" }
     ],
     "品": [
-        { sentence: "しなを えらびます。", reading: "しな" },
+        { sentence: "品を えらびます。", reading: "しな" },
         { sentence: "さく品を つくります。", reading: "ひん" }
     ],
     "負": [
         { sentence: "しあいに 負けます。", reading: "ま" },
-        { sentence: "ふ担します。", reading: "ふ" }
+        { sentence: "負担します。", reading: "ふ" }
     ],
     "部": [
         { sentence: "部かつを します。", reading: "ぶ" },
@@ -689,18 +689,18 @@ const kanjiExampleData_3 = {
     ],
     "勉": [
         { sentence: "勉きょうします。", reading: "べん" },
-        { sentence: "べんきょうが すきです。", reading: "べん" }
+        { sentence: "勉強が すきです。", reading: "べん" }
     ],
     "放": [
         { sentence: "とりを 放します。", reading: "はな" },
         { sentence: "放かごに あそびます。", reading: "ほう" }
     ],
     "味": [
-        { sentence: "あじが いいです。", reading: "あじ" },
+        { sentence: "味が いいです。", reading: "あじ" },
         { sentence: "きょう味が あります。", reading: "み" }
     ],
     "命": [
-        { sentence: "いのちを たいせつに します。", reading: "いのち" },
+        { sentence: "命を たいせつに します。", reading: "いのち" },
         { sentence: "命れいします。", reading: "めい" }
     ],
     "面": [
@@ -716,7 +716,7 @@ const kanjiExampleData_3 = {
         { sentence: "主役に なりました。", reading: "やく" }
     ],
     "薬": [
-        { sentence: "くすりを のみます。", reading: "くすり" },
+        { sentence: "薬を のみます。", reading: "くすり" },
         { sentence: "薬きょくに いきます。", reading: "やく" }
     ],
     "由": [
@@ -740,7 +740,7 @@ const kanjiExampleData_3 = {
         { sentence: "予そうします。", reading: "よ" }
     ],
     "羊": [
-        { sentence: "ひつじが います。", reading: "ひつじ" },
+        { sentence: "羊が います。", reading: "ひつじ" },
         { sentence: "羊もうの セーターです。", reading: "よう" }
     ],
     "洋": [
@@ -748,7 +748,7 @@ const kanjiExampleData_3 = {
         { sentence: "かい洋を こえます。", reading: "よう" }
     ],
     "様": [
-        { sentence: "たなかさまに てがみを かきます。", reading: "さま" },
+        { sentence: "たなか様に てがみを かきます。", reading: "さま" },
         { sentence: "様子を みます。", reading: "よう" }
     ],
     "葉": [
@@ -784,15 +784,15 @@ const kanjiExampleData_3 = {
         { sentence: "礼ぎただしいです。", reading: "れい" }
     ],
     "列": [
-        { sentence: "れつに ならびます。", reading: "れつ" },
-        { sentence: "行れつです。", reading: "れつ" }
+        { sentence: "列に ならびます。", reading: "れつ" },
+        { sentence: "行列です。", reading: "れつ" }
     ],
     "練": [
         { sentence: "練しゅうします。", reading: "れん" },
         { sentence: "生地を 練ります。", reading: "ね" }
     ],
     "路": [
-        { sentence: "道ろを あるきます。", reading: "ろ" },
+        { sentence: "道路を あるきます。", reading: "ろ" },
         { sentence: "いえ路に つきます。", reading: "じ" }
     ],
     "和": [
