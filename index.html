@@ -96,7 +96,13 @@
    <button aria-label="にがてテスト" class="menu-btn btn-nigate-test" onclick="startFolderRandomTest('nigate')">🎯<br>にがてテスト</button>
    
    <button aria-label="ランダムテスト" class="menu-btn btn-random" onclick="startRandomTest()">🎲 ランダムテスト (10問)</button>
+   <button aria-label="今日のチャレンジ" class="menu-btn btn-daily" onclick="startDailyChallenge()">☀️<br>きょうの10もん</button>
+   <button aria-label="復習モード" class="menu-btn btn-review" onclick="openReviewPanel()">🔁<br>ふくしゅう</button>
+   <button aria-label="学習カルテ" class="menu-btn btn-report" onclick="showLearningReport()">📊<br>がくしゅうカルテ</button>
+   <button aria-label="出題範囲を共有" class="menu-btn btn-share" onclick="openSharePicker()">🔗<br>はんいを共有</button>
    </div>
+
+   <div id="shared-scope-note" class="shared-scope-note" hidden></div>
 
    <div class="reset-link"><span onclick="showResetConfirm()">📋 データリセット</span></div>
 
@@ -119,6 +125,14 @@
       <div class="credit-name">1. KanjiVG</div>
       <div class="credit-desc">Copyright (c) 2009-2023 Ulrich Apel.<br>Licensed under the Creative Commons Attribution-Share Alike 3.0 License.</div></li>
     </ul>
+   </div>
+  </div>
+
+  <div id="feature-modal" class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="feature-modal-title">
+   <div class="feature-modal-content">
+    <button class="modal-close" aria-label="閉じる" onclick="closeFeatureModal()">×</button>
+    <h2 id="feature-modal-title"></h2>
+    <div id="feature-modal-body"></div>
    </div>
   </div>
 
