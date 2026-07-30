@@ -81,6 +81,16 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
 .share-kanji-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:7px;max-height:42vh;overflow:auto;padding:4px; }
 .share-kanji { border:2px solid #DDD;background:white;border-radius:10px;padding:8px 2px;font-size:1.3rem;cursor:pointer; }
 .share-kanji.selected { background:#E3F2FD;border-color:#0288D1; }
+.share-picker-tools { position:sticky;top:-26px;z-index:2;background:white;padding:8px 0 10px; }
+.share-grade-picker { display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:12px; }
+.share-grade-btn { min-width:54px;border:2px solid #B3E5FC;border-radius:999px;padding:7px 10px;background:#F4FBFF;color:#0277BD;font:700 .9rem inherit;cursor:pointer; }
+.share-grade-btn.active { border-color:#0288D1;background:#0288D1;color:white;box-shadow:0 3px 0 rgba(2,136,209,.2); }
+.share-search { display:flex;align-items:center;gap:8px;max-width:390px;margin:auto;padding:3px 13px;border:3px solid #81D4FA;border-radius:999px;background:white;box-sizing:border-box; }
+.share-search input { width:100%;min-width:0;padding:8px 2px;border:0;outline:0;background:transparent;color:var(--text);font:600 1rem inherit; }
+.share-picker-summary { display:flex;justify-content:space-between;gap:10px;margin:2px 3px 9px;color:#546E7A;font-size:.88rem; }
+.share-picker-summary b { color:#0288D1;font-size:1.05rem; }
+.share-empty { grid-column:1/-1;margin:20px;color:#777;text-align:center; }
+.feature-action-secondary { background:#ECEFF1;color:#455A64; }
 .review-options label { display:block;background:#F7F7F7;border-radius:12px;padding:11px;margin:8px 0;cursor:pointer; }
 
 @media (max-width:600px) {

@@ -27,6 +27,7 @@ let mistakeCount     = JSON.parse(localStorage.getItem('kanjiMasterMistakes')) |
 let learningStats    = JSON.parse(localStorage.getItem('kanjiMasterLearningStats')) || {};
 let sharedKanjiScope = [];
 let shareSelection   = new Set();
+let sharePickerGrade = 1;
 
 let currentChar   = null;
 let currentMode   = 'practice';
@@ -1198,22 +1199,61 @@ function startReview() {
 
 function openSharePicker() {
     shareSelection = new Set(sharedKanjiScope);
-    const list = allKanjiData[currentGrade] || [];
-    openFeatureModal('🔗 出題する漢字をえらぶ', `<p>${currentGrade}年生から選び、できたURLを先生から共有できます。</p>
-      <div class="share-kanji-grid">${list.map(i=>`<button class="share-kanji${shareSelection.has(i.char)?' selected':''}" data-char="${i.char}" onclick="toggleShareKanji(this)">${i.char}</button>`).join('')}</div>
-      <div class="feature-actions"><button class="feature-action" onclick="selectAllShareKanji()">ぜんぶ選ぶ</button><button class="feature-action" onclick="copyShareUrl()">URLをコピー</button></div>`);
+    sharePickerGrade = currentGrade;
+    openFeatureModal('🔗 出題する漢字をえらぶ', `<p>学年や読みから探して、出題する漢字を選べます。</p>
+      <div class="share-picker-tools">
+        <div class="share-grade-picker" role="group" aria-label="学年を選ぶ">
+          ${[1,2,3,4,5,6].map(g=>`<button class="share-grade-btn${g===sharePickerGrade?' active':''}" data-grade="${g}" onclick="setSharePickerGrade(${g})">${g}年</button>`).join('')}
+        </div>
+        <label class="share-search"><span>🔍</span><input id="share-search-input" type="search" placeholder="漢字・読みでさがす" oninput="renderShareKanji()"></label>
+      </div>
+      <div class="share-picker-summary"><strong id="share-result-count"></strong><span>選択中：<b id="share-selected-count">${shareSelection.size}</b>こ</span></div>
+      <div id="share-kanji-grid" class="share-kanji-grid"></div>
+      <div class="feature-actions"><button class="feature-action feature-action-secondary" onclick="selectAllShareKanji()">表示中をぜんぶ選ぶ</button><button class="feature-action feature-action-secondary" onclick="clearShareKanji()">選択をかいじょ</button><button class="feature-action" onclick="copyShareUrl()">URLをコピー</button></div>`);
+    renderShareKanji();
+}
+function setSharePickerGrade(grade) {
+    sharePickerGrade = grade;
+    document.querySelectorAll('.share-grade-btn').forEach(button => button.classList.toggle('active', Number(button.dataset.grade)===grade));
+    renderShareKanji();
+}
+function renderShareKanji() {
+    const grid = document.getElementById('share-kanji-grid');
+    if (!grid) return;
+    const input = document.getElementById('share-search-input');
+    const searchText = (input ? input.value : '').trim();
+    const searchKana = toHiragana(searchText);
+    const list = (allKanjiData[sharePickerGrade] || []).filter(item =>
+        !searchText || item.char.includes(searchText) || toHiragana(item.reading).includes(searchKana)
+    );
+    grid.innerHTML = list.length
+        ? list.map(i=>`<button class="share-kanji${shareSelection.has(i.char)?' selected':''}" data-char="${i.char}" onclick="toggleShareKanji(this)" aria-pressed="${shareSelection.has(i.char)}">${i.char}</button>`).join('')
+        : '<p class="share-empty">みつかりませんでした</p>';
+    document.getElementById('share-result-count').textContent = `${sharePickerGrade}年生・${list.length}こ`;
 }
 function toggleShareKanji(button) {
     const char=button.dataset.char;
     if (shareSelection.has(char)) shareSelection.delete(char); else shareSelection.add(char);
     button.classList.toggle('selected',shareSelection.has(char));
+    button.setAttribute('aria-pressed', shareSelection.has(char));
+    updateShareSelectedCount();
 }
 function selectAllShareKanji() {
-    document.querySelectorAll('.share-kanji').forEach(button=>{shareSelection.add(button.dataset.char);button.classList.add('selected');});
+    document.querySelectorAll('#share-kanji-grid .share-kanji').forEach(button=>{shareSelection.add(button.dataset.char);button.classList.add('selected');button.setAttribute('aria-pressed','true');});
+    updateShareSelectedCount();
+}
+function clearShareKanji() {
+    shareSelection.clear();
+    document.querySelectorAll('#share-kanji-grid .share-kanji').forEach(button=>{button.classList.remove('selected');button.setAttribute('aria-pressed','false');});
+    updateShareSelectedCount();
+}
+function updateShareSelectedCount() {
+    const count = document.getElementById('share-selected-count');
+    if (count) count.textContent = shareSelection.size;
 }
 async function copyShareUrl() {
     if (!shareSelection.size) { alert('漢字を 1つ以上 えらんでね！'); return; }
-    const url = new URL(location.href); url.search=''; url.searchParams.set('grade',currentGrade); url.searchParams.set('kanji',[...shareSelection].join(''));
+    const url = new URL(location.href); url.search=''; url.searchParams.set('grade',sharePickerGrade); url.searchParams.set('kanji',[...shareSelection].join(''));
     try { await navigator.clipboard.writeText(url.href); alert('共有URLを コピーしました！'); }
     catch (_) { prompt('このURLをコピーしてください',url.href); }
 }
