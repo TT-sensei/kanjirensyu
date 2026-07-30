@@ -5,7 +5,7 @@ const kanjiExampleData_4 = {
 ],
 "案": [
  { sentence:"いい 案を だす。", reading:"あん" },
- { sentence:"あん内を します。", reading:"あん" }
+ { sentence:"案内を します。", reading:"あん" }
 ],
 "位": [
  { sentence: "一ち位に なる。", reading: "い" },
@@ -17,14 +17,14 @@ const kanjiExampleData_4 = {
 ],
 "衣": [
  { sentence: "衣ふくを かう。", reading: "い" },
- { sentence: "天の はごろも。", reading: "ごろも" }
+ { sentence: "天の 衣。", reading: "ごろも" }
 ],
 "茨": [
  { sentence: "茨の みちを ゆく。", reading: "いばら" },
  { sentence: "茨城県の うみ。", reading: "いばら" }
 ],
 "印": [
- { sentence: "目じるしを つける。", reading: "じるし" },
+ { sentence: "目印を つける。", reading: "じるし" },
  { sentence: "印かんを おす。", reading: "いん" }
 ],
 "英": [
@@ -33,7 +33,7 @@ const kanjiExampleData_4 = {
 ],
 "栄": [
  { sentence: "町が 栄える。", reading: "さか" },
- { sentence: "えい光に 輝く。", reading: "えい" }
+ { sentence: "栄光に 輝く。", reading: "えい" }
 ],
 "媛": [
  { sentence: "愛媛県に いく。", reading: "ひめ" },
@@ -233,7 +233,7 @@ const kanjiExampleData_4 = {
 ],
 "結": [
  { sentence: "ひもを 結ぶ。", reading: "むす" },
- { sentence: "けっ果が 出る。", reading: "けつ" }
+ { sentence: "結果が 出る。", reading: "けつ" }
 ],
 "建": [
  { sentence: "家を 建てる。", reading: "た" },

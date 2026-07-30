@@ -17,7 +17,7 @@ const kanjiExampleData_2 = {
     ],
     "遠": [
         { sentence: "遠くまで あるきます。", reading: "とお" },
-        { sentence: "えん足に いきます。", reading: "えん" }
+        { sentence: "遠足に いきます。", reading: "えん" }
     ],
     "何": [
         { sentence: "何を たべますか。", reading: "なに" },
@@ -25,7 +25,7 @@ const kanjiExampleData_2 = {
     ],
     "科": [
         { sentence: "理科の じかんです。", reading: "か" },
-        { sentence: "げかに いきます。", reading: "か" }
+        { sentence: "外科に いきます。", reading: "か" }
     ],
     "夏": [
         { sentence: "夏やすみが たのしみです。", reading: "なつ" },
@@ -168,7 +168,7 @@ const kanjiExampleData_2 = {
         { sentence: "午ごに あそびます。", reading: "ご" }
     ],
     "後": [
-        { sentence: "うしろを ふりかえります。", reading: "うし" },
+        { sentence: "後ろを ふりかえります。", reading: "うし" },
         { sentence: "後はんに べんきょうします。", reading: "こう" }
     ],
     "語": [
@@ -193,7 +193,7 @@ const kanjiExampleData_2 = {
     ],
     "光": [
         { sentence: "光が さして います。", reading: "ひかり" },
-        { sentence: "日こうを あびます。", reading: "こう" }
+        { sentence: "日光を あびます。", reading: "こう" }
     ],
     "考": [
         { sentence: "よく 考えます。", reading: "かんが" },
@@ -249,7 +249,7 @@ const kanjiExampleData_2 = {
     ],
     "止": [
         { sentence: "くるまが 止まります。", reading: "と" },
-        { sentence: "中しに なりました。", reading: "し" }
+        { sentence: "中止に なりました。", reading: "し" }
     ],
     "市": [
         { sentence: "市やくしょに いきます。", reading: "し" },

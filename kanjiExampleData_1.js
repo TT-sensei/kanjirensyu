@@ -57,7 +57,7 @@ const kanjiExampleData_1 = {
 
 "気": [
  { sentence:"元気に あそびます。", reading:"き" },
- { sentence:"けはいを かんじます。", reading:"け" }
+ { sentence:"気はいを かんじます。", reading:"け" }
 ],
 
 "九": [
@@ -117,7 +117,7 @@ const kanjiExampleData_1 = {
 
 "左": [
  { sentence:"左てを あげます。", reading:"ひだり" },
- { sentence:"左へ まがります。", reading:"さ" }
+ { sentence:"左に まがります。", reading:"ひだり" }
 ],
 
 "三": [

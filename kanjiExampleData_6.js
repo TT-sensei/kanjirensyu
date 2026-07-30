@@ -305,7 +305,7 @@ const kanjiExampleData_6 = {
       reading: "きん"
     },
     {
-      sentence: "あらすじを はなす。",
+      sentence: "粗筋を はなす。",
       reading: "すじ"
     }
   ],

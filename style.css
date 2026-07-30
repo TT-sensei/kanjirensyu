@@ -286,3 +286,18 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(0,191,255,0.14);
 }
+.reading-hint-btn {
+    display: block;
+    margin: 0 auto 12px;
+    padding: 9px 22px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #FFB300, #FFCA28);
+    color: #5D4037;
+    box-shadow: 0 3px 0 #F57F17;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+}
+.reading-hint-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #F57F17; }

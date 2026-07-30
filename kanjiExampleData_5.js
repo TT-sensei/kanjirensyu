@@ -71,7 +71,7 @@ const kanjiExampleData_5 = {
   ],
   "易": [
     {
-      sentence: "ぼうえきを する。",
+      sentence: "貿易を する。",
       reading: "えき"
     },
     {
@@ -91,7 +91,7 @@ const kanjiExampleData_5 = {
   ],
   "液": [
     {
-      sentence: "えき体を のむ。",
+      sentence: "液体を のむ。",
       reading: "えき"
     },
     {
@@ -125,7 +125,7 @@ const kanjiExampleData_5 = {
       reading: "おう"
     },
     {
-      sentence: "右さ往さする。",
+      sentence: "右往左往する。",
       reading: "おう"
     }
   ],
@@ -401,7 +401,7 @@ const kanjiExampleData_5 = {
   ],
   "許": [
     {
-      sentence: "きょ可を えた。",
+      sentence: "許可を えた。",
       reading: "きょ"
     },
     {
@@ -451,7 +451,7 @@ const kanjiExampleData_5 = {
   ],
   "型": [
     {
-      sentence: "大がたの いぬ。",
+      sentence: "大型の いぬ。",
       reading: "がた"
     },
     {
