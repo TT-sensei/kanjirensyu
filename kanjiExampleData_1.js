@@ -1,4 +1,4 @@
-const kanjiExampleData = {
+const kanjiExampleData_1 = {
 
 "一": [
  { sentence:"一ねんせいに なりました。", reading:"いち" },

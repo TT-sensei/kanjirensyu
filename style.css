@@ -255,8 +255,6 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
 .credit-name { font-weight: bold; color: var(--primary); }
 .credit-desc { font-size: 0.8rem; color: #666; margin-top: 3px; }
 
-.btn-sentence-practice { background: linear-gradient(135deg, #00BFFF, #00E5FF); color: white; }
-.btn-sentence-test { background: linear-gradient(135deg, #FF6B35, #FFB74D); color: white; }
 .sentence-panel {
     background: linear-gradient(135deg, #FFFDF7, #F0FBFF);
     border: 3px solid #D6EAF8;
