@@ -666,16 +666,6 @@ function renderListProgressBar() {
         </div>`;
 }
 
-// ============================================================
-// ランダムテスト
-// ============================================================
-function startRandomTest() {
-    playSound('click');
-    const list = getAllowedList(allKanjiData[currentGrade] || []); if (!list.length) return;
-    randomQueue = [...list].sort(()=>0.5-Math.random()).slice(0,10);
-    randomIndex = 0; isRandomTest=true; currentMode='test';
-    levelBeforeRandomTest = getStats().level; startApp(randomQueue[0]);
-}
 function startFolderRandomTest(folderType) {
     playSound('click');
     let list = [];
@@ -1237,7 +1227,7 @@ function applySharedScopeFromUrl() {
     const grade = Number(params.get('grade'));
     if (grade>=1 && grade<=6) currentGrade=grade;
     const note=document.getElementById('shared-scope-note'); note.hidden=false;
-    note.innerText=`🔗 先生がえらんだ ${sharedKanjiScope.length}この漢字だけで学習します`;
+    note.innerHTML=`<strong>🔗 してい学習中</strong>先生がえらんだ ${sharedKanjiScope.length}この漢字だけで学習します`;
 }
 
 // ============================================================
