@@ -237,8 +237,13 @@
    <div class="result-content">
     <div class="big-icon" id="result-icon">⭐</div>
     <h2 id="result-msg">できた！</h2>
-    <button class="next-btn" onclick="handleNextClick()">つぎへ ➜</button> 
-    <button class="retry-btn" onclick="document.getElementById('result-overlay').classList.remove('active'); retry();">もういっかい</button>
+    <div class="result-actions" aria-label="つぎの そうさ">
+      <button id="result-test-btn" class="result-action result-action-test" onclick="switchResultMode('test')">🏅 テストへ</button>
+      <button class="result-action result-action-retry" onclick="retryFromResult()">↺ もういちど</button>
+      <button class="result-action result-action-next" onclick="handleNextClick()">つぎへ ➜</button>
+      <button id="result-practice-btn" class="result-action result-action-practice" onclick="switchResultMode('practice')">✏️ れんしゅうへ</button>
+      <button class="result-action result-action-home" onclick="goHomeFromResult()">🏠 ホームへ</button>
+    </div>
    </div>
   </div>
 

@@ -450,6 +450,15 @@ function getSentenceExamples(char, grade) {
     return (kanjiExampleDataByGrade[grade] && kanjiExampleDataByGrade[grade][char]) || [];
 }
 
+function pickTestExample(item, previousExample = null) {
+    const examples = getSentenceExamples(item.char, item._foundGrade || currentGrade);
+    if (!examples.length) return null;
+    const choices = previousExample && examples.length > 1
+        ? examples.filter(example => example !== previousExample)
+        : examples;
+    return choices[Math.floor(Math.random() * choices.length)];
+}
+
 // blank=true なら対象の字を □ に置き換える（テストモード用）
 function formatSentenceExample(char, example, blank) {
     const index = example.sentence.indexOf(char);
@@ -936,8 +945,7 @@ async function startApp(item, options = {}) {
     if (isPractice && !options.continuePractice) practiceRound=1;
     if (!options.continuePractice) noteAttempt(item.char);
     if (currentMode==='test' && !options.keepTestExample) {
-        const examples = getSentenceExamples(item.char, item._foundGrade || currentGrade);
-        currentTestExample = examples.length ? examples[Math.floor(Math.random()*examples.length)] : null;
+        currentTestExample = pickTestExample(item, options.differentTestExample ? currentTestExample : null);
     } else if (currentMode!=='test') {
         currentTestExample = null;
     }
@@ -1046,7 +1054,47 @@ function handleComplete() {
     msg.innerText=isPractice?'できたー！':'だいせいかい！';
     msg.style.color=isPractice?'#00D084':'#FF1493';
     icon.innerText=isPractice?'⭐':'👑';
+    updateResultActions(isPractice);
     setTimeout(()=>document.getElementById('result-overlay').classList.add('active'),800);
+}
+
+function updateResultActions(isPractice) {
+    document.getElementById('result-test-btn').hidden = !isPractice;
+    document.getElementById('result-practice-btn').hidden = isPractice;
+}
+
+function closeResultOverlay() {
+    document.getElementById('result-overlay').classList.remove('active');
+}
+
+function resetPendingResultNavigation() {
+    pendingLapUp=false;
+    pendingLevelUp=false;
+    pendingGoHome=false;
+    isRandomTest=false;
+}
+
+function retryFromResult() {
+    closeResultOverlay();
+    const isPractice=currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate';
+    startApp(currentChar, {
+        continuePractice: isPractice,
+        keepTestExample: isPractice,
+        differentTestExample: !isPractice
+    });
+}
+
+function switchResultMode(mode) {
+    closeResultOverlay();
+    resetPendingResultNavigation();
+    currentMode=mode;
+    startApp(currentChar);
+}
+
+function goHomeFromResult() {
+    closeResultOverlay();
+    resetPendingResultNavigation();
+    showScreen('title-screen');
 }
 
 function handleNextClick() {

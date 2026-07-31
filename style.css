@@ -255,6 +255,15 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
 .next-btn  { background: linear-gradient(135deg, var(--primary), #FF69B4); color: white; border: none; padding: 14px 30px; font-size: 1.1rem; border-radius: 30px; cursor: pointer; margin-top: 15px; box-shadow: var(--shadow-pop); font-weight: 600; font-family: inherit; transition: all 0.1s; }
 .next-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
 .retry-btn { background: none; border: 2px solid #DDD; color: #999; padding: 8px 20px; border-radius: 20px; cursor: pointer; margin-top: 10px; font-family: inherit; }
+.result-actions { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px; }
+.result-action { min-height:52px;border:0;border-radius:18px;padding:9px 8px;color:white;font:700 1rem/1.25 inherit;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.15); }
+.result-action:active { transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.15); }
+.result-action-test { background:linear-gradient(135deg,#FF1493,#FF69B4); }
+.result-action-retry { background:linear-gradient(135deg,#FF9800,#FFB74D); }
+.result-action-next { background:linear-gradient(135deg,#00BFA5,#4DB6AC); }
+.result-action-practice { background:linear-gradient(135deg,#00B86B,#53D594); }
+.result-action-home { background:linear-gradient(135deg,#78909C,#B0BEC5); }
+.result-actions .result-action-home { grid-column:span 1; }
 
 /* レベルアップ演出 */
 #levelup-overlay { background: rgba(255, 20, 147, 0.95); }
