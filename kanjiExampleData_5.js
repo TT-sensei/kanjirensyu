@@ -1629,6 +1629,16 @@ const kanjiExampleData_5 = {
       reading: "そな"
     }
   ],
+  "評": [
+    {
+      sentence: "本の 評ばんを 聞く。",
+      reading: "ひょう"
+    },
+    {
+      sentence: "作品を 評かする。",
+      reading: "ひょう"
+    }
+  ],
   "貧": [
     {
       sentence: "貧血に なる。",

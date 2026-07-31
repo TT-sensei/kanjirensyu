@@ -328,6 +328,10 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(0,191,255,0.14);
 }
+.practice-readings-hidden .sc,
+.practice-readings-hidden .ym {
+    display: none;
+}
 .reading-hint-btn {
     display: block;
     margin: 0 auto 12px;

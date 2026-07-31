@@ -32,6 +32,8 @@ let sharePickerGrade = 1;
 let currentChar   = null;
 let currentMode   = 'practice';
 let currentGrade  = 1;
+let practiceRound = 1;
+const PRACTICE_ROUNDS = 3;
 
 // ★ 追加：検索用学年フィルター（0=全学年）
 let searchGradeFilter = 0;
@@ -458,13 +460,17 @@ function formatSentenceExample(char, example, blank) {
     return `${before}${target}（${example.reading}）${after}`;
 }
 
-// れんしゅうモード：登録されている例文をすべて参考表示（読める形）
-function renderSentenceExamples() {
+// れんしゅうモード：2回目はレベル1、3回目はレベル2の例文だけを表示する。
+function renderPracticeExample() {
+    if (practiceRound === 1) return '';
     const examples = getSentenceExamples(currentChar.char, currentChar._foundGrade || currentGrade);
-    if (!examples.length) return '';
+    const exampleLevel = practiceRound - 1;
+    // levelがない旧データは、登録順をレベル1・2として扱う。
+    const example = examples.find(item => item.level === exampleLevel) || examples[exampleLevel - 1];
+    if (!example) return '';
     return `<div class="sentence-panel">
-        <div class="sentence-mode-title">📘 れいぶん</div>
-        ${examples.map(example => `<div class="sentence-example">${formatSentenceExample(currentChar.char, example, false)}</div>`).join('')}
+        <div class="sentence-mode-title">📘 レベル${exampleLevel}の れいぶん</div>
+        <div class="sentence-example active">${formatSentenceExample(currentChar.char, example, false)}</div>
     </div>`;
 }
 
@@ -926,7 +932,9 @@ async function playAnimation() {
 async function startApp(item, options = {}) {
     if (hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}
     isAnimating=false; currentChar=item;
-    noteAttempt(item.char);
+    const isPractice = currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate';
+    if (isPractice && !options.continuePractice) practiceRound=1;
+    if (!options.continuePractice) noteAttempt(item.char);
     if (currentMode==='test' && !options.keepTestExample) {
         const examples = getSentenceExamples(item.char, item._foundGrade || currentGrade);
         currentTestExample = examples.length ? examples[Math.floor(Math.random()*examples.length)] : null;
@@ -941,7 +949,15 @@ async function startApp(item, options = {}) {
     const rd=document.getElementById('current-reading'); if(rd)rd.style.display='none';
     if (isRandomTest){msg.innerText=`🎲 テスト: ${randomIndex+1}/${randomQueue.length}問目`;msg.style.color="#9B59B6";}
     else if (currentMode==='test'){msg.innerText=currentTestExample?"文の □に 入る かんじを かこう！":"この かんじ を かこう！";msg.style.color="#FF1493";}
-    else{msg.innerText="うすいせんを なぞろう！";msg.style.color="#00D084";}
+    else{
+        const roundGuides = [
+            'おんよみ・くんよみを 見て かこう！',
+            'レベル1の れいぶんを 見て かこう！',
+            'レベル2の れいぶんを 見て かこう！'
+        ];
+        msg.innerText=`${practiceRound}/${PRACTICE_ROUNDS}かい目　${roundGuides[practiceRound-1]}`;
+        msg.style.color="#00D084";
+    }
 
     let onyomi=[],kunyomi=[];
     if (item.reading){
@@ -963,9 +979,9 @@ async function startApp(item, options = {}) {
         .test-readings-hidden .sc,.test-readings-hidden .ym{display:none;}
         @media(max-width:500px){.kl{flex-direction:column;align-items:center;gap:15px;}.sc{display:none;}.ym{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;font-size:1.2rem;font-weight:bold;}}
         </style>
-        ${currentMode==='test' ? renderTestExample() : renderSentenceExamples()}
+        ${currentMode==='test' ? renderTestExample() : renderPracticeExample()}
         ${currentMode==='test' && currentTestExample ? `<button type="button" class="reading-hint-btn" aria-controls="test-reading-panel" aria-expanded="false" onclick="revealTestReadings(this)">💡 ヒント</button>` : ''}
-        <div class="kl${currentMode==='test' && currentTestExample ? ' test-readings-hidden' : ''}" id="test-reading-panel">
+        <div class="kl${currentMode==='test' && currentTestExample ? ' test-readings-hidden' : ''}${isPractice && practiceRound > 1 ? ' practice-readings-hidden' : ''}" id="test-reading-panel">
             <div class="sc">${kunyomi.length>0?`<div class="yb kun">くんよみ</div><div class="ypc" style="color:#2874A6;">${dKP}</div>`:''}</div>
             <div class="ym">${kunyomi.length>0?`<div style="color:#2874A6;">${dKM}</div>`:''}${onyomi.length>0?`<div style="color:#B03A2E;">${dOM}</div>`:''}</div>
             <div style="position:relative;width:${CANVAS_SIZE}px;height:${CANVAS_SIZE}px;margin:0;background:white;flex-shrink:0;border-radius:24px;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
@@ -1000,6 +1016,13 @@ function handleComplete() {
     playSound('complete');
     const msg=document.getElementById('result-msg'),icon=document.getElementById('result-icon');
     const isPractice=(currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate');
+
+    if (isPractice && practiceRound < PRACTICE_ROUNDS) {
+        practiceRound++;
+        startApp(currentChar, { continuePractice: true });
+        return;
+    }
+
     const store=isPractice?progressPractice:progressTest;
     const sKey=isPractice?'kanjiMasterPractice':'kanjiMasterTest';
 
@@ -1118,7 +1141,8 @@ function handleRandomClearClick() {
 function retry(){
     if(hintTimeout){clearTimeout(hintTimeout);hintTimeout=null;}
     isAnimating=false;
-    startApp(currentChar, { keepTestExample: true }); // 同じ字のリトライでは例文を選び直さない
+    const isPractice=currentMode==='practice'||currentMode==='tokkun'||currentMode==='nigate';
+    startApp(currentChar, { keepTestExample: true, continuePractice: isPractice }); // 同じ字・同じ練習段階からやり直す
 }
 function showResetConfirm()  {playSound('click');document.getElementById('reset-confirm').classList.add('active');}
 function closeResetConfirm() {playSound('click');document.getElementById('reset-confirm').classList.remove('active');}
