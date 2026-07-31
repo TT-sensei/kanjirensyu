@@ -7,7 +7,7 @@ const kanjiExampleData_1 = {
 
   "右": [
     { sentence: "右を むきます。", reading: "みぎ", level: 1 },
-    { sentence: "右てを あげます。", reading: "みぎ", level: 2 },
+    { sentence: "右の てを あげます。", reading: "みぎ", level: 2 },
     { sentence: "つぎの かどを 右へ まがります。", reading: "みぎ", level: 3 }
   ],
 
@@ -20,7 +20,7 @@ const kanjiExampleData_1 = {
   "円": [
     { sentence: "円を かきます。", reading: "えん", level: 1 },
     { sentence: "ひゃく円を もっています。", reading: "えん", level: 2 },
-    { sentence: "まるい かたちを 円で かこみます。", reading: "えん", level: 3 }
+    { sentence: "おおきな 円を ていねいに かきます。", reading: "えん", level: 3 }
   ],
 
   "王": [
@@ -36,7 +36,7 @@ const kanjiExampleData_1 = {
   ],
 
   "下": [
-    { sentence: "つくえの 下に あります。", reading: "した", level: 1 },
+    { sentence: "いすは つくえの 下に あります。", reading: "した", level: 1 },
     { sentence: "かいだんを 下ります。", reading: "お", level: 2 },
     { sentence: "はこの 下から ねこが でてきました。", reading: "した", level: 3 }
   ],
@@ -68,12 +68,12 @@ const kanjiExampleData_1 = {
   "気": [
     { sentence: "げん気に あそびます。", reading: "き", level: 1 },
     { sentence: "てん気が いいです。", reading: "き", level: 2 },
-    { sentence: "あしたの てん気が 気になります。", reading: "き", level: 3 }
+    { sentence: "あしたの 気おんを しらべます。", reading: "き", level: 3 }
   ],
 
   "九": [
     { sentence: "九こ あります。", reading: "きゅう", level: 1 },
-    { sentence: "九つの りんごです。", reading: "ここの", level: 2 },
+    { sentence: "りんごが 九つ あります。", reading: "ここの", level: 2 },
     { sentence: "九じに ねる じゅんびを します。", reading: "く", level: 3 }
   ],
 
@@ -139,7 +139,7 @@ const kanjiExampleData_1 = {
 
   "左": [
     { sentence: "左を むきます。", reading: "ひだり", level: 1 },
-    { sentence: "左てを あげます。", reading: "ひだり", level: 2 },
+    { sentence: "左の てを あげます。", reading: "ひだり", level: 2 },
     { sentence: "みちの 左がわを あるきます。", reading: "ひだり", level: 3 }
   ],
 
@@ -187,7 +187,7 @@ const kanjiExampleData_1 = {
 
   "七": [
     { sentence: "七こ あります。", reading: "なな", level: 1 },
-    { sentence: "七つの ほしです。", reading: "なな", level: 2 },
+    { sentence: "ほしが 七つ みえます。", reading: "なな", level: 2 },
     { sentence: "七じに おきて あさごはんを たべます。", reading: "しち", level: 3 }
   ],
 
@@ -241,7 +241,7 @@ const kanjiExampleData_1 = {
 
   "人": [
     { sentence: "人が います。", reading: "ひと", level: 1 },
-    { sentence: "三人で あそびます。", reading: "にん", level: 2 },
+    { sentence: "さん人で あそびます。", reading: "にん", level: 2 },
     { sentence: "こまっている 人に こえを かけました。", reading: "ひと", level: 3 }
   ],
 
@@ -277,7 +277,7 @@ const kanjiExampleData_1 = {
 
   "石": [
     { sentence: "石を ひろいます。", reading: "いし", level: 1 },
-    { sentence: "じしゃくに つく 石です。", reading: "いし", level: 2 },
+    { sentence: "つるつるした 石を みつけました。", reading: "いし", level: 2 },
     { sentence: "かわらで まるい 石を みつけました。", reading: "いし", level: 3 }
   ],
 
@@ -294,8 +294,8 @@ const kanjiExampleData_1 = {
   ],
 
   "川": [
-    { sentence: "川で あそびます。", reading: "かわ", level: 1 },
-    { sentence: "天の川を みます。", reading: "がわ", level: 2 },
+    { sentence: "川を みます。", reading: "かわ", level: 1 },
+    { sentence: "あまの川を みます。", reading: "がわ", level: 2 },
     { sentence: "おおきな 川に はしが かかっています。", reading: "かわ", level: 3 }
   ],
 
@@ -319,7 +319,7 @@ const kanjiExampleData_1 = {
 
   "足": [
     { sentence: "足を あらいます。", reading: "あし", level: 1 },
-    { sentence: "みずが 足ります。", reading: "た", level: 2 },
+    { sentence: "いすが ひとつ 足りません。", reading: "た", level: 2 },
     { sentence: "たくさん あるいて 足が つかれました。", reading: "あし", level: 3 }
   ],
 
@@ -331,7 +331,7 @@ const kanjiExampleData_1 = {
 
   "大": [
     { sentence: "大きな いぬです。", reading: "おお", level: 1 },
-    { sentence: "大じな ものです。", reading: "だい", level: 2 },
+    { sentence: "ほんを 大じに します。", reading: "だい", level: 2 },
     { sentence: "ちいさな たねから 大きな はなが さきました。", reading: "おお", level: 3 }
   ],
 
@@ -355,7 +355,7 @@ const kanjiExampleData_1 = {
 
   "虫": [
     { sentence: "虫を つかまえます。", reading: "むし", level: 1 },
-    { sentence: "なき 虫の こえが します。", reading: "むし", level: 2 },
+    { sentence: "よるに 虫の こえが きこえます。", reading: "むし", level: 2 },
     { sentence: "はっぱの うらに ちいさな 虫が いました。", reading: "むし", level: 3 }
   ],
 
@@ -367,7 +367,7 @@ const kanjiExampleData_1 = {
 
   "天": [
     { sentence: "天きが いいです。", reading: "てん", level: 1 },
-    { sentence: "天の川を みます。", reading: "あま", level: 2 },
+    { sentence: "天のかわを みます。", reading: "あま", level: 2 },
     { sentence: "あしたは 天きが よいので そとで あそびます。", reading: "てん", level: 3 }
   ],
 
@@ -402,9 +402,9 @@ const kanjiExampleData_1 = {
   ],
 
   "年": [
-    { sentence: "一ねんが たちました。", reading: "ねん", level: 1 },
-    { sentence: "年を かぞえます。", reading: "とし", level: 2 },
-    { sentence: "あたらしい 年が はじまりました。", reading: "とし", level: 3 }
+    { sentence: "年が あけました。", reading: "とし", level: 1 },
+    { sentence: "いち年せいに なりました。", reading: "ねん", level: 2 },
+    { sentence: "あたらしい 年の もくひょうを きめました。", reading: "とし", level: 3 }
   ],
 
   "白": [
@@ -439,19 +439,19 @@ const kanjiExampleData_1 = {
 
   "本": [
     { sentence: "本を よみます。", reading: "ほん", level: 1 },
-    { sentence: "えんぴつが 一本 あります。", reading: "ぽん", level: 2 },
+    { sentence: "えんぴつを いっ本 つかいます。", reading: "ぽん", level: 2 },
     { sentence: "としょかんで おもしろい 本を みつけました。", reading: "ほん", level: 3 }
   ],
 
   "名": [
     { sentence: "名まえを かきます。", reading: "な", level: 1 },
-    { sentence: "花の 名を しらべます。", reading: "な", level: 2 },
-    { sentence: "しらない 花の 名まえを しらべました。", reading: "な", level: 3 }
+    { sentence: "はなの 名を しらべます。", reading: "な", level: 2 },
+    { sentence: "しらない はなの 名まえを しらべました。", reading: "な", level: 3 }
   ],
 
   "目": [
     { sentence: "目を とじます。", reading: "め", level: 1 },
-    { sentence: "一つ目の もんだいです。", reading: "め", level: 2 },
+    { sentence: "ひとつ目の もんだいです。", reading: "め", level: 2 },
     { sentence: "まぶしいので 目を ほそめました。", reading: "め", level: 3 }
   ],
 
@@ -469,7 +469,7 @@ const kanjiExampleData_1 = {
 
   "林": [
     { sentence: "林を あるきます。", reading: "はやし", level: 1 },
-    { sentence: "竹林を あるきます。", reading: "りん", level: 2 },
+    { sentence: "ちく林を あるきます。", reading: "りん", level: 2 },
     { sentence: "林の なかで とりの こえを ききました。", reading: "はやし", level: 3 }
   ],
 
