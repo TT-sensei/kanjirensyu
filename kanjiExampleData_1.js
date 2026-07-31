@@ -350,4 +350,132 @@ const kanjiExampleData_1 = {
   "中": [
     { sentence: "はこの 中を みます。", reading: "なか", level: 1 },
     { sentence: "中がっこうへ いきます。", reading: "ちゅう", level: 2 },
-    { sentence: "かばんの 中から えんぴつを だし
+    { sentence: "かばんの 中から えんぴつを だしました。", reading: "なか", level: 3 }
+  ],
+
+  "虫": [
+    { sentence: "虫を つかまえます。", reading: "むし", level: 1 },
+    { sentence: "なき 虫の こえが します。", reading: "むし", level: 2 },
+    { sentence: "はっぱの うらに ちいさな 虫が いました。", reading: "むし", level: 3 }
+  ],
+
+  "町": [
+    { sentence: "町を あるきます。", reading: "まち", level: 1 },
+    { sentence: "町の おまつりです。", reading: "まち", level: 2 },
+    { sentence: "わたしの 町には おおきな こうえんが あります。", reading: "まち", level: 3 }
+  ],
+
+  "天": [
+    { sentence: "天きが いいです。", reading: "てん", level: 1 },
+    { sentence: "天の川を みます。", reading: "あま", level: 2 },
+    { sentence: "あしたは 天きが よいので そとで あそびます。", reading: "てん", level: 3 }
+  ],
+
+  "田": [
+    { sentence: "田んぼが あります。", reading: "た", level: 1 },
+    { sentence: "すい田で こめを つくります。", reading: "でん", level: 2 },
+    { sentence: "みどりの 田んぼに かぜが ふいています。", reading: "た", level: 3 }
+  ],
+
+  "土": [
+    { sentence: "土を さわります。", reading: "つち", level: 1 },
+    { sentence: "土ようびに あそびます。", reading: "ど", level: 2 },
+    { sentence: "はちに 土を いれて たねを まきました。", reading: "つち", level: 3 }
+  ],
+
+  "二": [
+    { sentence: "二こ あります。", reading: "に", level: 1 },
+    { sentence: "りんごが 二つ あります。", reading: "ふた", level: 2 },
+    { sentence: "二じに こうえんで まちあわせます。", reading: "に", level: 3 }
+  ],
+
+  "日": [
+    { sentence: "日が のぼります。", reading: "ひ", level: 1 },
+    { sentence: "日ようびに あそびます。", reading: "にち", level: 2 },
+    { sentence: "あたたかい 日に そとで あそびました。", reading: "ひ", level: 3 }
+  ],
+
+  "入": [
+    { sentence: "へやに 入ります。", reading: "はい", level: 1 },
+    { sentence: "かばんに 入れます。", reading: "い", level: 2 },
+    { sentence: "くつを ぬいで きょうしつに 入りました。", reading: "はい", level: 3 }
+  ],
+
+  "年": [
+    { sentence: "一ねんが たちました。", reading: "ねん", level: 1 },
+    { sentence: "年を かぞえます。", reading: "とし", level: 2 },
+    { sentence: "あたらしい 年が はじまりました。", reading: "とし", level: 3 }
+  ],
+
+  "白": [
+    { sentence: "白い ゆきです。", reading: "しろ", level: 1 },
+    { sentence: "白ちょうを みます。", reading: "はく", level: 2 },
+    { sentence: "白い くもが そらに うかんでいます。", reading: "しろ", level: 3 }
+  ],
+
+  "八": [
+    { sentence: "八こ あります。", reading: "はち", level: 1 },
+    { sentence: "りんごが 八つ あります。", reading: "やっ", level: 2 },
+    { sentence: "八じまでに がっこうへ いきます。", reading: "はち", level: 3 }
+  ],
+
+  "百": [
+    { sentence: "百まで かぞえます。", reading: "ひゃく", level: 1 },
+    { sentence: "百えんを もっています。", reading: "ひゃく", level: 2 },
+    { sentence: "テストで 百てんを とりました。", reading: "ひゃく", level: 3 }
+  ],
+
+  "文": [
+    { sentence: "文を かきます。", reading: "ぶん", level: 1 },
+    { sentence: "みじかい 文を よみます。", reading: "ぶん", level: 2 },
+    { sentence: "「きょうは はれです。」という 文を かきました。", reading: "ぶん", level: 3 }
+  ],
+
+  "木": [
+    { sentence: "木に のぼります。", reading: "き", level: 1 },
+    { sentence: "木ようびに あそびます。", reading: "もく", level: 2 },
+    { sentence: "おおきな 木の したで どんぐりを ひろいました。", reading: "き", level: 3 }
+  ],
+
+  "本": [
+    { sentence: "本を よみます。", reading: "ほん", level: 1 },
+    { sentence: "えんぴつが 一本 あります。", reading: "ぽん", level: 2 },
+    { sentence: "としょかんで おもしろい 本を みつけました。", reading: "ほん", level: 3 }
+  ],
+
+  "名": [
+    { sentence: "名まえを かきます。", reading: "な", level: 1 },
+    { sentence: "花の 名を しらべます。", reading: "な", level: 2 },
+    { sentence: "しらない 花の 名まえを しらべました。", reading: "な", level: 3 }
+  ],
+
+  "目": [
+    { sentence: "目を とじます。", reading: "め", level: 1 },
+    { sentence: "一つ目の もんだいです。", reading: "め", level: 2 },
+    { sentence: "まぶしいので 目を ほそめました。", reading: "め", level: 3 }
+  ],
+
+  "立": [
+    { sentence: "そのばに 立ちます。", reading: "た", level: 1 },
+    { sentence: "やくに 立つ どうぐです。", reading: "た", level: 2 },
+    { sentence: "なまえを よばれて いすから 立ちました。", reading: "た", level: 3 }
+  ],
+
+  "力": [
+    { sentence: "力を だします。", reading: "ちから", level: 1 },
+    { sentence: "みんなで きょう力します。", reading: "りょく", level: 2 },
+    { sentence: "さいごまで あきらめずに 力いっぱい はしりました。", reading: "ちから", level: 3 }
+  ],
+
+  "林": [
+    { sentence: "林を あるきます。", reading: "はやし", level: 1 },
+    { sentence: "竹林を あるきます。", reading: "りん", level: 2 },
+    { sentence: "林の なかで とりの こえを ききました。", reading: "はやし", level: 3 }
+  ],
+
+  "六": [
+    { sentence: "六こ あります。", reading: "ろく", level: 1 },
+    { sentence: "りんごが 六つ あります。", reading: "むっ", level: 2 },
+    { sentence: "六じに おきて かおを あらいます。", reading: "ろく", level: 3 }
+  ]
+};
