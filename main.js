@@ -193,6 +193,10 @@ function getTitleData(level) {
 // ============================================================
 // UI 更新
 // ============================================================
+const NAVI_FACE_BASE='https://tt-sensei.github.io/navi-character-/assets/web/characters/';
+const NAVI_FACE_IDS=['riku','sora','kai','saku','tsuki','nami'];
+const NAVI_FACE_POSES=['02-happy','07-encouraging','08-celebrating'];
+function showRandomNaviFace(){const id=NAVI_FACE_IDS[Math.floor(Math.random()*NAVI_FACE_IDS.length)];const pose=NAVI_FACE_POSES[Math.floor(Math.random()*NAVI_FACE_POSES.length)];const el=document.getElementById('correct-navi-face');if(el)el.style.backgroundImage='url("'+NAVI_FACE_BASE+id+'/expressions/'+pose+'.webp")';}
 const COLLECTION_ASSET_BASE='https://tt-sensei.github.io/edu-assets/assets/web/';
 const JAPANESE_BADGES=[
  {id:'word-sprout',name:'ことばのめ',path:'badges/japanese/word-sprout',condition:()=>Object.keys(progressPractice).length>=1},
