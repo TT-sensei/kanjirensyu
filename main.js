@@ -1079,7 +1079,8 @@ function handleComplete() {
     msg.style.color=isPractice?'#00D084':'#FF1493';
     icon.innerText=isPractice?'⭐':'👑';
     updateResultActions(isPractice);
-    setTimeout(()=>document.getElementById('result-overlay').classList.add('active'),800);
+    showRandomNaviFace();
+        setTimeout(()=>document.getElementById('result-overlay').classList.add('active'),800);
 }
 
 function updateResultActions(isPractice) {
