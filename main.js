@@ -221,7 +221,7 @@ function updateUI() {
     const titleMascot=document.getElementById('title-mascot'); if(titleMascot){titleMascot.textContent='';titleMascot.style.backgroundImage=`url("${m.image||m.mascot}")`;}
     set('title-level',  s.level);
     set('title-name',   m.title);
-    set('list-mascot',  m.mascot);
+    const listMascot=document.getElementById('list-mascot'); if(listMascot){listMascot.textContent='';listMascot.style.backgroundImage=`url("${m.image||m.mascot}")`;}
     set('list-level',   s.level);
     set('next-xp',      s.nextLevelXP);
     const xpBar = document.getElementById('xp-bar');
