@@ -193,13 +193,32 @@ function getTitleData(level) {
 // ============================================================
 // UI 更新
 // ============================================================
+const COLLECTION_ASSET_BASE='https://tt-sensei.github.io/edu-assets/assets/web/';
+const JAPANESE_BADGES=[
+ {id:'word-sprout',name:'ことばのめ',path:'badges/japanese/word-sprout',condition:()=>Object.keys(progressPractice).length>=1},
+ {id:'careful-writing',name:'ていねい名人',path:'badges/japanese/careful-writing',condition:()=>Object.keys(progressPractice).length>=10},
+ {id:'word-detective',name:'もじたんてい',path:'badges/japanese/word-detective',condition:()=>Object.keys(progressTest).length>=10},
+ {id:'reading-aloud',name:'音読チャレンジャー',path:'badges/japanese/reading-aloud',condition:()=>getStats().level>=15},
+ {id:'book-lover',name:'本だいすき',path:'badges/japanese/book-lover',condition:()=>getStats().level>=30},
+ {id:'language-explorer',name:'ことばたんけん家',path:'badges/japanese/language-explorer',condition:()=>getStats().level>=50},
+ {id:'structure-reader',name:'文のしくみ名人',path:'badges/japanese/structure-reader',condition:()=>getStats().level>=80},
+ {id:'deeper-reading',name:'深読み名人',path:'badges/japanese/deeper-reading',condition:()=>getStats().level>=120}
+];
+function isCollectionEarned(b){return getStats().level>=b.level;}
+function isJapaneseEarned(b){return !!b.condition();}
+function rewardTile(b,earned){return '<div class="reward-tile '+(earned?'earned':'locked')+'><img src="'+b.image+'" alt="'+(earned?b.badgeName||b.name:'ひみつのバッジ')+'" loading="lazy"><span>'+(earned?b.badgeName||b.name:'？？？')+'</span></div>';}
+function renderRewardGroup(title,items,earnedFn){return '<section><div class="reward-group-title">'+title+'</div><div class="reward-grid">'+items.map(b=>rewardTile(b,earnedFn(b))).join('')+'</div></section>';}
+function updateRewardCard(){const collectionCount=COLLECTION_LEVELS.filter(isCollectionEarned).length;const japaneseCount=JAPANESE_BADGES.filter(isJapaneseEarned).length;const total=collectionCount+japaneseCount;const el=document.getElementById('reward-card-count');if(el)el.textContent=total+'こ';}
+function openRewardGallery(){const gallery=document.getElementById('reward-gallery');if(!gallery)return;const groups=[];let current='';for(const b of COLLECTION_LEVELS){if(b.seriesName!==current){current=b.seriesName;groups.push({title:'コレクション：'+current,items:[]});}groups[groups.length-1].items.push(b);}gallery.innerHTML=groups.map(g=>renderRewardGroup(g.title,g.items,isCollectionEarned)).join('')+renderRewardGroup('国語バッジ',JAPANESE_BADGES,isJapaneseEarned);updateRewardCard();document.getElementById('reward-overlay').classList.add('active');}
+function closeRewardGallery(){const el=document.getElementById('reward-overlay');if(el)el.classList.remove('active');}
+
 function updateUI() {
     const s = getStats(), m = getTitleData(s.level);
     const set = (id, val, prop='innerText') => {
         const el = document.getElementById(id);
         if (el) el[prop] = val;
     };
-    set('title-mascot', m.mascot);
+    const titleMascot=document.getElementById('title-mascot'); if(titleMascot){titleMascot.textContent='';titleMascot.style.backgroundImage=`url("${m.image||m.mascot}")`;}
     set('title-level',  s.level);
     set('title-name',   m.title);
     set('list-mascot',  m.mascot);
@@ -208,6 +227,7 @@ function updateUI() {
     const xpBar = document.getElementById('xp-bar');
     if (xpBar) xpBar.style.width = `${(s.currentLevelXP/XP_PER_LEVEL)*100}%`;
     updateGradeProgressBars();
+    updateRewardCard();
 }
 
 function getAllowedList(list) {
@@ -1132,7 +1152,7 @@ function showLevelUpDisplay(level) {
     playSound('levelup');
     document.getElementById('levelup-overlay').classList.add('active');
     document.getElementById('new-level-num').innerText=level;
-    document.getElementById('levelup-mascot').innerText=getTitleData(level).mascot;
+    const lm=document.getElementById('levelup-mascot'); const lt=getTitleData(level); lm.innerText=''; lm.style.backgroundImage=`url("${lt.image||lt.mascot}")`;
 }
 function closeLevelUp() {
     document.getElementById('levelup-overlay').classList.remove('active');
