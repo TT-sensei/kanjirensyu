@@ -1077,7 +1077,7 @@ function handleComplete() {
 
     msg.innerText=isPractice?'できたー！':'だいせいかい！';
     msg.style.color=isPractice?'#00D084':'#FF1493';
-    icon.innerText=isPractice?'⭐':'👑';
+    if(icon) icon.innerText='';
     updateResultActions(isPractice);
     showRandomNaviFace();
         setTimeout(()=>document.getElementById('result-overlay').classList.add('active'),800);
