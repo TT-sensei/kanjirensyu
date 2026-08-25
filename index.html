@@ -25,7 +25,7 @@
 
    <div class="grade-selector">
      <button class="grade-btn selected" data-grade="1" onclick="setGrade(1)">
-       <div class="grade-btn-icon">📚</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/riku/expressions/02-happy.webp')" aria-label="1年生ナビキャラ"></div>
        <div>1年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-1" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -34,7 +34,7 @@
        <div id="grade-lap-1" style="display:none;font-size:0.65rem;font-weight:bold;margin-top:1px;"></div>
      </button>
      <button class="grade-btn" data-grade="2" onclick="setGrade(2)">
-       <div class="grade-btn-icon">📖</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/sora/expressions/02-happy.webp')" aria-label="2年生ナビキャラ"></div>
        <div>2年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-2" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -43,7 +43,7 @@
        <div id="grade-lap-2" style="display:none;font-size:0.65rem;font-weight:bold;margin-top:1px;"></div>
      </button>
      <button class="grade-btn" data-grade="3" onclick="setGrade(3)">
-       <div class="grade-btn-icon">✏️</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/kai/expressions/02-happy.webp')" aria-label="3年生ナビキャラ"></div>
        <div>3年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-3" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -52,7 +52,7 @@
        <div id="grade-lap-3" style="display:none;font-size:0.65rem;font-weight:bold;margin-top:1px;"></div>
      </button>
      <button class="grade-btn" data-grade="4" onclick="setGrade(4)">
-       <div class="grade-btn-icon">📝</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/saku/expressions/02-happy.webp')" aria-label="4年生ナビキャラ"></div>
        <div>4年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-4" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -61,7 +61,7 @@
        <div id="grade-lap-4" style="display:none;font-size:0.65rem;font-weight:bold;margin-top:1px;"></div>
      </button>
      <button class="grade-btn" data-grade="5" onclick="setGrade(5)">
-       <div class="grade-btn-icon">🖊️</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/tsuki/expressions/02-happy.webp')" aria-label="5年生ナビキャラ"></div>
        <div>5年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-5" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -70,7 +70,7 @@
        <div id="grade-lap-5" style="display:none;font-size:0.65rem;font-weight:bold;margin-top:1px;"></div>
      </button>
      <button class="grade-btn" data-grade="6" onclick="setGrade(6)">
-       <div class="grade-btn-icon">📑</div>
+       <div class="grade-btn-icon grade-face" style="background-image:url('https://tt-sensei.github.io/navi-character-/assets/web/characters/nami/expressions/02-happy.webp')" aria-label="6年生ナビキャラ"></div>
        <div>6年</div>
        <div style="background:#eee;border-radius:999px;height:4px;margin-top:4px;overflow:hidden;">
          <div id="grade-progress-6" style="height:100%;width:0%;transition:width 0.4s;border-radius:999px;"></div>
@@ -243,7 +243,6 @@
   <div id="result-overlay" class="overlay">
    <div class="result-content">
     <div class="correct-navi-face" id="correct-navi-face" aria-hidden="true"></div>
-    <div class="big-icon" id="result-icon">⭐</div>
     <h2 id="result-msg">できた！</h2>
     <div class="result-actions" aria-label="つぎの そうさ">
       <button id="result-test-btn" class="result-action result-action-test" onclick="switchResultMode('test')">🏅 テストへ</button>
