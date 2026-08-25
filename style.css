@@ -369,3 +369,5 @@ h1 { font-size: 3rem; margin: 0; background: linear-gradient(90deg, var(--primar
 #levelup-mascot.image-mascot{width:96px;height:96px;margin:10px auto;}
 
 .correct-navi-face{width:96px;height:96px;margin:0 auto 4px;background-repeat:no-repeat;background-position:center;background-size:contain;}
+
+.grade-face{width:42px;height:42px;margin:0 auto 3px;background-repeat:no-repeat;background-position:center;background-size:contain;font-size:0;}
