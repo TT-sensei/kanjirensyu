@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-08-26T21:15:03.527Z",
+  "grades": 6,
+  "examples": 3078,
+  "readings": 1583,
+  "maxLength": 5,
+  "features": {
+    "smallKana": 271,
+    "smallTsu": 19,
+    "dakuten": 553,
+    "handakuten": 10,
+    "longMark": 0,
+    "repeatedCharacter": 52
+  },
+  "issueCount": 0,
+  "issues": []
+}
