@@ -1,0 +1,13 @@
+/* Keep the learners beside the question instead of resting at the field bottom. */
+@media (min-width:681px){
+  .battle-field{grid-template-columns:minmax(130px,1fr) minmax(430px,620px) minmax(130px,1fr);align-items:center}
+  .fighter{align-self:center;transform:translateY(-24px)}
+  .fighter img{width:min(100%,230px);height:min(39vh,290px)}
+}
+@media (min-width:681px) and (max-width:900px){
+  .battle-field{grid-template-columns:120px minmax(400px,1fr) 120px}
+  .fighter{transform:translateY(-18px)}
+}
+@media (max-width:680px){
+  .fighter{align-self:start;transform:translateY(-6px)}
+}
