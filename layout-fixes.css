@@ -1,4 +1,5 @@
 /* Keep the learners beside the question instead of resting at the field bottom. */
+[hidden]{display:none!important}
 @media (min-width:681px){
   .battle-field{grid-template-columns:minmax(130px,1fr) minmax(430px,620px) minmax(130px,1fr);align-items:center}
   .fighter{align-self:center;transform:translateY(-24px)}
