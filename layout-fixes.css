@@ -11,3 +11,20 @@
 @media (max-width:680px){
   .fighter{align-self:start;transform:translateY(-6px)}
 }
+.fighter.special img{animation:special-burst .82s ease-out}
+.battle-field.special-flash{animation:special-field-flash .82s ease-out}
+@keyframes special-burst{
+  0%{transform:scale(.96);filter:drop-shadow(0 8px 8px #07142d55)}
+  28%{transform:translateX(14px) scale(1.13);filter:drop-shadow(0 0 18px #fff) drop-shadow(0 0 30px #76c8ff)}
+  70%{transform:translateX(8px) scale(1.08);filter:drop-shadow(0 0 13px #fff3a6)}
+  100%{transform:scale(1);filter:drop-shadow(0 8px 8px #07142d55)}
+}
+@keyframes special-field-flash{
+  0%,100%{box-shadow:inset 0 0 0 transparent}
+  25%{box-shadow:inset 0 0 70px #bde8ffcc}
+  60%{box-shadow:inset 0 0 42px #fff0a8aa}
+}
+@media (prefers-reduced-motion:reduce){
+  .fighter.special img,.battle-field.special-flash{animation:none}
+  .fighter.special img{filter:drop-shadow(0 0 16px #76c8ff)}
+}
