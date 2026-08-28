@@ -11,6 +11,7 @@ const CHARACTERS={
 };
 const MONSTER_DATA=window.KANJI_MONSTER_DATA;
 const MONSTERS=MONSTER_DATA.all;
+const MONSTER_ASSET=MONSTER_DATA.basePath;
 const MONSTER_GROUPS=MONSTER_DATA.byGroup;
 const MONSTER_KIND_ORDER=['zako','evolved','boss'];
 const MONSTER_KIND_LABELS={zako:'ザコ',evolved:'ザコ進化',boss:'ボス'};
@@ -110,7 +111,7 @@ function charImage(stateName='stand',characterId=state.selectedCharacter){const 
 function renderQuestion(){
   if(!battle||battle.index>=battle.questions.length||battle.playerHP<=0||battle.enemyHP<=0){finishSession();return}const q=battle.questions[battle.index];answer='';locked=false;
   $('#question-count').textContent=`${battle.index+1}/${battle.questions.length}`;$('#combo-count').textContent=combo.getCurrent();$('#player-hp').textContent=battle.mode==='training'?'特訓中':`${battle.playerHP}/5`;$('#player-hpbar').style.width=`${battle.playerHP*20}%`;$('#enemy-hpbar').style.width=`${battle.enemyHP/battle.maxEnemyHP*100}%`;
-  $('#player-img').src=charImage('stand');$('#enemy-img').src=battle.mode==='training'?charImage('stand',battle.trainingPartner):ASSET+battle.monster.path;$('#enemy-img').alt=battle.mode==='training'?'いっしょに特訓する仲間':'モンスター';$('.enemy').hidden=false;$('.fighter.player').hidden=false;$('.fighter.player .hpbar').hidden=battle.mode==='training';$('.fighter.enemy .hpbar').hidden=battle.mode==='training';
+  $('#player-img').src=charImage('stand');$('#enemy-img').src=battle.mode==='training'?charImage('stand',battle.trainingPartner):MONSTER_ASSET+battle.monster.path;$('#enemy-img').alt=battle.mode==='training'?'いっしょに特訓する仲間':'モンスター';$('.enemy').hidden=false;$('.fighter.player').hidden=false;$('.fighter.player .hpbar').hidden=battle.mode==='training';$('.fighter.enemy .hpbar').hidden=battle.mode==='training';
   const at=q.sentence.indexOf(q.char),before=at>=0?q.sentence.slice(0,at):q.sentence,after=at>=0?q.sentence.slice(at+q.char.length):'';$('#sentence').innerHTML=at>=0?`${escapeHtml(before)}<mark class="target-kanji">${escapeHtml(q.char)}</mark>${escapeHtml(after)}`:escapeHtml(q.sentence);
   $('#prompt').textContent=`「${q.char}」の よみは？`;updateTokkunButton(q);$('#feedback').textContent='';$('#feedback').className='feedback';$('#submit-btn').textContent='こたえる';renderInput(q);updateBattleHud()
 }
@@ -145,7 +146,7 @@ function showCollectionTab(tab){
 }
 function monsterCardMarkup(monster){
   const found=!!state.monsterBook[monster.id],count=state.monsterDefeatCounts[monster.id]||0,record=state.monsterBook[monster.id];
-  return `<article class='monster-card ${found?'found':'locked'}'><img src='${ASSET}${monster.path}' alt='${found?escapeHtml(monster.name):'未発見のモンスター'}' loading='lazy' decoding='async'><b>${found?escapeHtml(monster.name):'？？？'}</b><small>${found?`${count}回撃破<br>${escapeHtml(record.firstDefeat||'発見済み')}`:'未発見'}</small></article>`
+  return `<article class='monster-card ${found?'found':'locked'}'><img src='${MONSTER_ASSET}${monster.path}' alt='${found?escapeHtml(monster.name):'未発見のモンスター'}' loading='lazy' decoding='async'><b>${found?escapeHtml(monster.name):'？？？'}</b><small>${found?`${count}回撃破<br>${escapeHtml(record.firstDefeat||'発見済み')}`:'未発見'}</small></article>`
 }
 function renderMonsterBook(){
   const box=$('#collection-monsters');if(!box)return;
