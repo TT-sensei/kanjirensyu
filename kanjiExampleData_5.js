@@ -69,11 +69,6 @@ const kanjiExampleData_5 = {
     { sentence: "夜桜を ながめる。", reading: "ざくら", level: 2 },
     { sentence: "あたたかい 風が ふき、川ぞいの 桜が いっせいに さきました。", reading: "さくら", level: 3 },
   ],
-  "恩": [
-    { sentence: "恩を わすれない。", reading: "おん", level: 1 },
-    { sentence: "そだててくれた 恩。", reading: "おん", level: 2 },
-    { sentence: "おせわに なった 恩を わすれず、いつか おれいを したいです。", reading: "おん", level: 3 },
-  ],
   "可": [
     { sentence: "入る 許可を もらう。", reading: "か", level: 1 },
     { sentence: "じつげんが 可能だ。", reading: "か", level: 2 },
@@ -803,6 +798,11 @@ const kanjiExampleData_5 = {
     { sentence: "畑に 肥料を まく。", reading: "ひ", level: 1 },
     { sentence: "目が 肥える。", reading: "こ", level: 2 },
     { sentence: "作物が よく そだつよう、畑の 土に 肥料を まきました。", reading: "ひ", level: 3 },
+  ],
+  "評": [
+    { sentence: "作品の 評価を 聞く。", reading: "ひょう", level: 1 },
+    { sentence: "友だちの 評判が よい。", reading: "ひょう", level: 2 },
+    { sentence: "発表の あとで、先生から よい 評価を もらいました。", reading: "ひょう", level: 3 },
   ],
   "費": [
     { sentence: "旅行の 費用。", reading: "ひ", level: 1 },
