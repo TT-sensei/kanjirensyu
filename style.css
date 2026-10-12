@@ -32,3 +32,25 @@
   .monster-card b{font-size:.74rem;line-height:1.25}
   .monster-card small{font-size:.65rem;line-height:1.25}
 }
+
+
+/* Grade-first stage picker: six clear tap targets above the four stages. */
+.stage-section-heading{margin-bottom:8px}
+.grade-selector{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.grade-option{min-height:44px;padding:8px 6px;border:1px solid #cbd7e8;border-radius:12px;background:#fff;color:var(--navy);font-weight:900;font-size:1rem;box-shadow:0 2px 5px #10244a0d;cursor:pointer}
+.grade-option.active{background:var(--navy);border-color:var(--navy);color:#fff;box-shadow:0 3px 10px #243b6733}
+.grade-option:focus-visible{outline:3px solid #f4b942;outline-offset:2px}
+.stage-card{min-height:108px;padding:11px}
+.stage-card h3{font-size:1.12rem;margin:0 0 8px}
+.stage-card .percent{font-size:1.3rem}
+.stage-card small{font-size:.76rem}
+@media(max-width:680px){
+  .grade-selector{gap:5px;margin-bottom:10px}
+  .grade-option{min-height:42px;padding:7px 2px;font-size:.94rem;border-radius:10px}
+  .stage-grid{gap:8px}
+  .stage-card{min-height:94px;padding:9px;border-radius:14px}
+  .stage-card h3{font-size:1rem;margin:0 0 5px}
+  .stage-card .percent{font-size:1.18rem}
+  .stage-card small{font-size:.68rem}
+  .stage-card.master:after{right:5px;top:5px;padding:3px 5px;font-size:.58rem}
+}
